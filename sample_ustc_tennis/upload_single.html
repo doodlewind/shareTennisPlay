@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../jquery/jquery.mobile-1.4.0.css">
+<script src="../jquery/jquery-2.0.3.min.js"></script>
+<script src="../jquery/jquery.mobile-1.4.0.js"></script>
+<style>
+.ui-table-columntoggle-btn {
+    display: none !important;
+}	
+</style>
+<title>Home</title>
+</head>
+<body>
+	<div data-role="page">
+		<div data-role="header">
+	 	   <div data-role="navbar">
+	 	           <ul>
+	 	               <li><a href="#"class="ui-btn-active">上传单打</a></li>
+	 	               <li><a href="upload_double.html">上传双打</a></li>
+	 	           </ul>
+	 	       </div><!-- /navbar -->
+	  </div>
+
+		<div data-role="main">
+			<div style="padding:10px 20px;">
+		    <form>
+					        <input data-mini="true" type="text" name="text-6" id="text-6" value="" placeholder="对手名，必填哦">
+							<fieldset data-role="controlgroup" data-mini="true"data-type="horizontal">
+																<legend>时间</legend>
+							    <select name="month" id="month">
+							        <option value="1">1月</option>
+							        <option value="2">2月</option>
+									<option value="3"selected="selected">3月</option>
+									<option value="4">4月</option>
+									<option value="5">5月</option>
+									<option value="6">7月</option>
+									<option value="7">8月</option>
+									<option value="8">9月</option>
+									<option value="9">10月</option>
+									<option value="10">11月</option>
+									<option value="11">12月</option>
+
+							    </select>
+							    <select name="day" id="day">
+							        <option value="1">1日</option>
+							        <option value="2">2日</option>
+							        <option value="3">3日</option>
+							        <option value="4">4日</option>
+							        <option value="5"selected="selected">5日</option>
+							        <option value="6">6日</option>
+							        <option value="7">7日</option>
+							        <option value="8">8日</option>
+							        <option value="9">9日</option>
+							    </select>
+							    <select name="day" id="day">
+							        <option value="1">1日</option>
+							        <option value="2">2日</option>
+							        <option value="3">3日</option>
+							        <option value="4">4日</option>
+							        <option value="5"selected="selected">5日</option>
+							        <option value="6">6日</option>
+							        <option value="7">7日</option>
+							        <option value="8">8日</option>
+							        <option value="9">9日</option>
+							    </select>	
+							</fieldset>				    
+						<div class="ui-grid-a">
+							<div class="ui-block-a">
+								<fieldset data-role="controlgroup" data-type="horizontal"data-mini="true">
+									<legend>比分</legend>
+								    <select name="score_p1" id="score_p1">
+										<option>我</option>
+										<option value="0">0</option>
+								        <option value="1">1</option>
+								        <option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+								    </select>
+								    <select name="score_p1" id="score_p1">
+										<option>对手</option>
+										<option value="0">0</option>
+								        <option value="1">1</option>
+								        <option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+								    </select>
+								</fieldset>
+								
+							</div>
+							<div class="ui-block-b">
+								<fieldset data-role="controlgroup" data-type="horizontal"data-mini="true">
+								        <legend>地点</legend>
+								        <input type="radio" name="radio-choice-v-6" id="radio-choice-v-6a" value="on">
+								        <label for="radio-choice-v-6a">东场</label>
+								        <input type="radio" name="radio-choice-v-6" id="radio-choice-v-6b" value="off">
+								        <label for="radio-choice-v-6b">西场</label>
+								</fieldset>
+								
+							</div>
+						</div>
+						<fieldset data-role="controlgroup">
+						<input data-mini="true"type="text" name="p2_name" id="textinput-2" placeholder="说句话吧，必填哦" value="">
+						</fieldset>
+
+					
+					
+						
+					
+
+					<div class="ui-grid-a">
+						<div class="ui-block-a">
+						<a href="#" class="ui-btn ui-corner-all ui-shadow">返回</a>
+						</div>
+						<div class="ui-block-b">
+					    <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">提交！</button>
+						</div>
+					</div>
+		        </div>
+		    </form>
+	
+		</div><!--main-->
+
+	</div><!--page-->
+
+
+</body>
+</html>
+

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../jquery/jquery.mobile-1.4.0.css">
+<script src="../jquery/jquery-2.0.3.min.js"></script>
+<script src="../jquery/jquery.mobile-1.4.0.js"></script>
+
+<title>开发进度</title>
+</head>
+<body>
+<div data-role="page">
+<div data-role="header" data-position="fixed">
+    <h3>进度</h3>
+</div><!--header-->
+<div role="main" class="ui-content">
+
+	<div class="ui-body ui-body-a ui-corner-all">
+	<h3>4.14</h3>
+	<p>上传页面采用grid标签排版，尽量保证表单完整性</p>
+	<p>完成新上传页面模板，单、双打上传功能分两个网页实现</p>
+	</div>
+	<br/>
+
+	<div class="ui-body ui-body-a ui-corner-all">
+	<h3>4.13</h3>
+	<p>完成『我的自由赛』栏目（用于计算百分比的总人数变量i需要改进）</p>
+	<p>完成自由赛积分表格</p>
+	<p>完成outputfns.php中的display_date_button函数，依当前时间输出表单按钮（闰年判断未加入逢百年的400整除）</p>
+	<p>添加了game_double数据表，用set_p1n2和set_p3n4表示数据</p>
+	<p>修正了不同页面页脚高亮部分的显示问题</p>
+	</div>
+	<br/>
+		
+	<div class="ui-body ui-body-a ui-corner-all">
+	<h3>4.9</h3>
+	<p>上传功能实现，返回页面可正常显示，但数据完整性验证有待完善</p>
+	</div>
+	<br/>
+		
+	<div class="ui-body ui-body-a ui-corner-all">
+	<h3>3.27</h3>
+	<p>完成upload战果表单的可行性验证</p>
+	<p>添加作为控制的函数库content_fns.php和upload_fns.php</p>
+	<p>修正导致跳转错误信息的content_fns.php中的多余 ?> 内容</p>
+	<p>完成Timeline的球赛动态部分</p>
+	<p>将game表中time改为使用INT(10)存储</p>
+	<p>测试数据：user库密码均为1</p>
+	<p>为方便测试，暂时注释掉register_verify.php和data_valid_fns.php的验证部分</p>
+	<p>USTC-Tennis的自定义logo完成，尺寸为200px*200px</p>
+	<p>可按参数生成不同header和footer的set_html函数完成</p>
+	<p>静态页面制作完成</p>
+	</div>
+	<br/>
+
+	<div class="ui-body ui-body-a ui-corner-all">
+	<h3>3.26</h3>
+	<p>解决member.php的错误提示bug: set_html_header函数在每个生成的html中只能调用一次，否则无法正常显示
+	<p>个人信息页面profile.html制作完成</p>
+	<p>用于上传战果和约球的invitation按钮和upload_free按钮对应的2个表单制作完成，采用popup形式</p>
+	<p>rank.html因navbar组件的刷新问题，拆分为rank_tour.html和rank_free.html，均已完成</p>
+	<p>home.html 已完成</p>
+	<p>完成静态页面草图</p>
+	</div>
+	<br/>
+
+
+
+
+
+
+
+
+
+
+
+
+	</div><!--main-->
+	<div data-role="footer" data-position="fixed">
+	    <h3>ewind 2014</h3>
+	</div><!-- /footer -->
+</div><!--page-->
+</body>
+</html>

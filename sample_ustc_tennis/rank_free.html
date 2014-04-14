@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../jquery/jquery.mobile-1.4.0.css">
+<script src="../jquery/jquery-2.0.3.min.js"></script>
+<script src="../jquery/jquery.mobile-1.4.0.js"></script>
+<style>
+.ui-table-columntoggle-btn {
+    display: none !important;
+}	
+</style>
+
+<title>积分排名</title>
+</head>
+<body>
+<div data-role="page">
+	<div data-role="header" data-position="fixed">
+	    <a href="#" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-left ui-icon-plus">战果</a>
+	   <h1>积分排名</h1>
+	       <a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-left ui-icon-plus">约球
+	   </a>
+	   <div data-role="navbar">
+	           <ul>
+	               <li><a href="#"class="ui-btn-active">自由赛积分</a></li>
+	               <li><a href="rank_tour.html">巡回赛积分</a></li>
+	           </ul>
+	       </div><!-- /navbar -->
+	</div><!--header-->
+	<div role="main" class="ui-content">
+
+		 <table data-role="table" id="table-custom-2" data-mode="columntoggle" class="ui-body-d ui-shadow table-stripe ui-responsive"  data-column-popup-theme="a">
+			 <thead>
+			 <tr class="ui-bar-d">
+				 <th>名次</th>
+				 <th>姓名</th>
+				 <th>积分</th>
+			 </tr>
+			 </thead>
+			 <tbody>
+			 <tr>
+				 <td>1</td>
+				 <td>宋亮</td>
+				 <td>350</td>
+			 </tr>
+			 
+			 <tr>
+				 <td>2</td>
+				 <td>严忠波</td>
+				 <td>200</td>
+			 </tr>
+		 
+			 <tr>
+				 <td>3</td>
+				 <td>林智中</td>
+				 <td>180</td>
+			 </tr>
+			
+			 <tr>
+				 <td>4</td>
+				 <td>戴一</td>
+				 <td>150</td>
+			 </tr>
+			 
+			 <tr>
+				 <td>5</td>
+				 <td>高洋</td>
+				 <td>120</td>
+			 </tr>
+			 </tbody>
+		 </table>
+		
+		</br>
+		 <div class="ui-corner-all custom-corners">
+		   <div class="ui-bar ui-bar-a">
+		     <h3>我的自由赛</h3>
+		   </div>
+		   <div class="ui-body ui-body-a">
+		     <p>5分，第15名，位列前40%</p>
+		   </div>
+		 </div>
+	
+	</div><!--main-->
+	
+	
+	<div data-role="footer" data-position="fixed">
+	    <div data-role="navbar">
+			<ul>
+			                <li><a href="home.html" data-icon="bars" >动态</a></li>
+			                <li><a href="#" data-icon="star" class="ui-btn-active">积分</a></li>
+			                <li><a href="profile.html" data-icon="user">我的</a></li>
+			            </ul>
+	    </div><!-- /navbar -->
+	</div><!-- /footer -->
+</div><!--page-->
+</body>
+</html>

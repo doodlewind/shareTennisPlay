@@ -1,0 +1,9 @@
+<?php
+//放置所有网站功能相关的脚本文件
+require_once('output_fns.php');
+require_once('data_valid_fns.php');
+require_once('user_auth_fns.php');
+require_once('db_fns.php');
+require_once('content_fns.php');
+require_once('upload_fns.php');
+?>
