@@ -6,7 +6,7 @@
 		if(!filled_out($_POST)) {
 			throw new Exception('Sorry, 貌似没填完整呢~');
 		}
-		upload_free(1);
+		upload_free(2);
 		//布置成员页面
 		set_html_header(0,'上传比赛成功！');
 		echo_event('上次完成','比赛记录已上传，<a href="member.php">返回</a>');

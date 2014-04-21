@@ -8,8 +8,8 @@
 		}
 		upload_free(1);
 		//布置成员页面
-		set_html_header(0,'上传比赛成功！');
-		echo_event('上次完成','比赛记录已上传，<a href="member.php">返回</a>');
+		set_html_header(0,'上传练习记录成功！');
+		echo_event('上次完成','练习记录已上传，<a href="member.php">返回</a>');
 		set_html_footer(0);
 	}
 	catch (Exception $e) {
