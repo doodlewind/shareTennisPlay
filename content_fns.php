@@ -39,7 +39,7 @@ class timeline
 							where value_tour>0;"));
 		$this->practice = $this->create_practice_event($this->conn->query("select * from practice"));
 	}
-	
+	//?
 }
 class event
 {
