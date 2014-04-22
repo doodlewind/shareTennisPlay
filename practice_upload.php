@@ -6,10 +6,11 @@
 		if(!filled_out($_POST)) {
 			throw new Exception('Sorry, 貌似没填完整呢~');
 		}
-		upload_free(1);
-		//布置成员页面
+		upload_practice();
 		set_html_header(0,'上传练习记录成功！');
-		echo_event('上次完成','练习记录已上传，<a href="member.php">返回</a>');
+		//布置成员页面
+		
+		echo_event('上传完成','练习记录已上传，<a href="member.php">返回</a>');
 		set_html_footer(0);
 	}
 	catch (Exception $e) {

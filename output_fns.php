@@ -68,19 +68,19 @@ function display_date_button($flag){
 					echo '<option value="'.$i.'">'.$i.'点</option>';
 				}
 			}
-			if($hour > 18){
+			else if($hour > 18){
 				for($i=7;$i<=17;$i++){
 					echo '<option value="'.$i.'">'.$i.'点</option>';
 				}
 				echo '<option value="18"selected="selected">18点</option>';
 			}
-			for($i=7;$i<=18;$i++){
+			else for($i=7;$i<=18;$i++){
 					if ($i==$hour){
 						echo '<option value="'.$i.'"selected="selected">'.$i.'点</option>';
 					}
 					else echo '<option value="'.$i.'">'.$i.'点</option>';
 			}
-			break;
+
 	}
 	?>
 
@@ -212,7 +212,7 @@ function set_html_header($flag,$title){
 	   <div data-role="navbar">
 	           <ul>
 	               <li><a href="#"class="ui-btn-active">自由赛积分</a></li>
-	               <li><a href="rank_tour.html">巡回赛积分</a></li>
+	               <li><a href="rank_tour.php">巡回赛积分</a></li>
 	           </ul>
 	       </div><!-- /navbar -->
 <?php
@@ -221,7 +221,7 @@ function set_html_header($flag,$title){
 ?>
 	   <div data-role="navbar">
 	           <ul>
-	               <li><a href="rank_free.html">自由赛积分</a></li>
+	               <li><a href="rank_free.php">自由赛积分</a></li>
 	               <li><a href="#"class="ui-btn-active">巡回赛积分</a></li>
 	           </ul>
 	       </div><!-- /navbar -->
@@ -512,5 +512,81 @@ function display_double_form(){
 	</body>
 	</html>
 <?php
+}
+function display_tour_form(){
+?>
+		    <form action="tour_upload.php"method="post">
+				<fieldset data-type="horizontal">
+							<input data-mini="true" type="text" name="id_p1" value="" placeholder="Player1学号">
+
+							<input data-mini="true" type="text" name="id_p2" value="" placeholder="Player2学号">
+							<input data-mini="true" type="text" name="value_tour" value="" placeholder="积分">
+				</fieldset>
+							<fieldset data-role="controlgroup" data-mini="true"data-type="horizontal">
+								<legend>时间</legend>
+							    <select name="month" id="month">
+<?php
+	display_date_button(1);
+?>
+							    </select>
+							    <select name="day" id="day">
+<?php
+	display_date_button(2);
+?>
+							    </select>
+							    <select name="hour" id="hour">
+<?php
+	display_date_button(3);
+?>
+							    </select>	
+							</fieldset>				    
+						<div class="ui-grid-a">
+							<div class="ui-block-a">
+								<fieldset data-role="controlgroup" data-type="horizontal"data-mini="true">
+									<legend>比分</legend>
+								    <select name="set_p1" id="set_p1">
+										<option>P1</option>
+										<option value="0">0</option>
+								        <option value="1">1</option>
+								        <option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+								    </select>
+								    <select name="set_p2" id="set_p2">
+										<option>P2</option>
+										<option value="0">0</option>
+								        <option value="1">1</option>
+								        <option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+								    </select>
+								</fieldset>
+								
+							</div>
+							<div class="ui-block-b">
+								<fieldset data-role="controlgroup" data-type="horizontal"data-mini="true">
+								        <legend>地点</legend>
+								        <input type="radio" name="court" id="radio-choice-v-6a" value="1">
+								        <label for="radio-choice-v-6a">东场</label>
+								        <input type="radio" name="court" id="radio-choice-v-6b" value="2">
+								        <label for="radio-choice-v-6b">西场</label>
+								</fieldset>
+							        
+							</div>
+						</div>
+
+								
+					
+					    <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">提交！
+
+		        </div>
+		    </form>
+<?
 }
 ?>

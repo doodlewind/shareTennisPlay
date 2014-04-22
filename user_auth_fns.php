@@ -23,6 +23,7 @@ function register($id_ustc,$name,$mobile,$passwd) {
 function login($id_ustc,$passwd) {
 	//用户登录，若出现异常则返回错误提示
 	$conn = db_connect();
+	$id_ustc = strtoupper($id_ustc);
 	$result = $conn->query("select * from user
 							where id_ustc='".$id_ustc."'
 							and passwd_sha=sha1('".$passwd."')");
@@ -63,5 +64,17 @@ function check_valid_id() {
 		exit();
 	}
 }
-
+function check_valid($id_ustc){
+	$conn = db_connect();
+	$conn->query("SET NAMES UTF8");
+	$sql = 'select id_ustc ';
+	$sql.= 'from user where id_ustc="';
+	$sql.= $id_ustc;
+	$sql.= '";';;
+	$result = $conn->query($sql);
+	if(!($result->fetch_assoc()['id_ustc'])){
+		return false;
+	}
+	return true;
+}
 ?>
