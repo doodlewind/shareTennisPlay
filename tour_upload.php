@@ -3,7 +3,6 @@ require_once('tennis_fns.php');
 session_start();
 set_html_header(0,"巡回赛上传");
 display_tour_form();
-
 start_tour();
 function start_tour(){
 	try{

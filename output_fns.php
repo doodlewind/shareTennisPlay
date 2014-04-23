@@ -3,29 +3,49 @@ function display_register_form(){
 	//注册表单
 ?>
 <form action="register_verify.php"method="post">
-	<ul>
-		<li>学号<input type="text"name="id_ustc"></li>
-		<li>姓名<input type="text"name="name"></li>
-		<li>手机<input type="text"name="mobile"></li>
-		<li>密码<input type="password"name="passwd"></li>
-	</ul>
-	<br/>
-	<input type="submit"value="注册！">
+	<div class="ui-grid-a">
+		<div class="ui-block-a">
+			<img src="banner.jpg"width="80%">
+		</div>
+		<div class="ui-block-b">
+			<fieldset data-role="controlgroup" data-mini="true">
+				<div>
+					<legend>学号</legend><input type="text"name="id_ustc">
+					<legend>姓名</legend><input type="text"name="name">
+					<legend>手机</legend><input type="text"name="mobile">
+					<legend>密码</legend><input type="password"name="passwd">
+					<input type="submit"value="注册！">
+				</div>
+			</fieldset>
+
+		
+		</div>
 </form>
 <?php
 }//函数结束
 function display_login_form(){
 	//登录表单
 ?>
-<button><img src="img/logo.png"></img></button>
 <form action="member.php"method="post">
-	<ul>
-		<li>学号<input type="text"name="id_ustc"></li>
-		<li>密码<input type="password"name="passwd"></li>
-	</ul>
-	<br/>
-	<input type="submit"value="登录！">
+				<div class="ui-grid-a">
+					<div class="ui-block-a">
+						<img src="banner.jpg"width="80%">
+					</div>
+					<div class="ui-block-b">
+						<fieldset data-role="controlgroup" data-mini="true">
+							<div>
+							<legend>学号</legend>
+							<input data-mini="true" type="text"name="id_ustc">
+							<legend>密码</legend>
+							<input data-mini="true"type="password"name="passwd">
+							<br/>
+							<input type="submit"value="登录！">
+							</div>
+						</fieldset>
+					</div>
+				</div>
 </form>
+
 <?php
 }
 function display_date_button($flag){
@@ -94,10 +114,20 @@ function echo_event($title,$content){
 	   <div class="ui-bar ui-bar-a">
 	     <h3><?php echo $title;?></h3>
 	   </div>
-	   <div class="ui-body ui-body-a">
+	   <div data-mini="true" class="ui-body ui-body-a">
 	     <p><?php echo $content;?></p>
 	   </div>
 	 </div>
+<?php
+}
+function echo_br(){
+	echo '<br/>';
+}
+function echo_short($content){
+	?>
+   <div class="ui-bar ui-bar-a">
+     <h3><?php echo $content;?></h3>
+   </div>
 <?php
 }
 function set_html_header($flag,$title){
@@ -259,21 +289,21 @@ function set_html_footer($flag){
 ?>	
                 <li><a href="#" data-icon="bars" class="ui-btn-active">动态</a></li>
                 <li><a href="rank_free.php" data-icon="star" >积分</a></li>
-                <li><a href="profile.php" data-icon="user">我的</a></li>
+                <li><a href="profile.php" data-icon="user">会员</a></li>
 <?php
 	}
 	else if($flag==2){
 ?>
                 <li><a href="member.php" data-icon="bars">动态</a></li>
                 <li><a href="#" data-icon="star"class="ui-btn-active">积分</a></li>
-                <li><a href="profile.php" data-icon="user">我的</a></li>
+                <li><a href="profile.php" data-icon="user">会员</a></li>
 <?php
 	}
 	else if($flag==3){
 ?>
                 <li><a href="member.php" data-icon="bars" >动态</a></li>
                 <li><a href="rank_free.php" data-icon="star" >积分</a></li>
-                <li><a href="#"class="ui-btn-active" data-icon="user">我的</a></li>
+                <li><a href="#"class="ui-btn-active" data-icon="user">会员</a></li>
 <?php
 	}
 ?>
@@ -516,14 +546,24 @@ function display_double_form(){
 function display_tour_form(){
 ?>
 		    <form action="tour_upload.php"method="post">
+				
 				<fieldset data-type="horizontal">
-							<input data-mini="true" type="text" name="id_p1" value="" placeholder="Player1学号">
-
-							<input data-mini="true" type="text" name="id_p2" value="" placeholder="Player2学号">
+					<div class="ui-grid-a">
+						<div class="ui-block-a">
+							<input data-mini="true" type="text" name="name1" value="" placeholder="Player1姓名">
+						</div>
+						<div class="ui-block-b">
+							<input data-mini="true" type="text" name="name2" value="" placeholder="Player2姓名">
+						</div>
+					</div>
 							<input data-mini="true" type="text" name="value_tour" value="" placeholder="积分">
 				</fieldset>
 							<fieldset data-role="controlgroup" data-mini="true"data-type="horizontal">
 								<legend>时间</legend>
+								<select name="year" id="year">
+									<option value="2014">2014年</option>
+									<option value="2013">2013年</option>
+								</select>
 							    <select name="month" id="month">
 <?php
 	display_date_button(1);
@@ -577,13 +617,14 @@ function display_tour_form(){
 								        <input type="radio" name="court" id="radio-choice-v-6b" value="2">
 								        <label for="radio-choice-v-6b">西场</label>
 								</fieldset>
-							        
+							      
 							</div>
+							 <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">提交！ 
 						</div>
 
 								
 					
-					    <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">提交！
+					    
 
 		        </div>
 		    </form>

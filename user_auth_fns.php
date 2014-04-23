@@ -1,7 +1,6 @@
 <?php
 function register($id_ustc,$name,$mobile,$passwd) {
 	//连接数据库，若注册失败则返回错误提示
-	
 	$conn = db_connect();
 	$result = $conn->query("select * from user where 
 		id_ustc ='".$id_ustc."'");
@@ -33,7 +32,7 @@ function login($id_ustc,$passwd) {
 	if ($result->num_rows>0) {
 		return true;
 	}else{
-		throw new Exception('抱歉，学号和密码不匹配哦...');
+		throw new Exception('用户名或密码填错了哦...<a href="login.php">返回</a>');
 	}
 }
 function init_member() {
@@ -64,17 +63,14 @@ function check_valid_id() {
 		exit();
 	}
 }
-function check_valid($id_ustc){
+function get_id($name){
 	$conn = db_connect();
 	$conn->query("SET NAMES UTF8");
 	$sql = 'select id_ustc ';
-	$sql.= 'from user where id_ustc="';
-	$sql.= $id_ustc;
-	$sql.= '";';;
+	$sql.= 'from user where name="';
+	$sql.= $name;
+	$sql.= '";';
 	$result = $conn->query($sql);
-	if(!($result->fetch_assoc()['id_ustc'])){
-		return false;
-	}
-	return true;
+	return $result->fetch_assoc()['id_ustc'];
 }
 ?>

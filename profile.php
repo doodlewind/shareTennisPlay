@@ -19,21 +19,20 @@ class profile{
 		$this->query('id_ustc',$this->id_ustc);
 	}
 	private function query($table_name){
-		$conn = db_connect();
-		$conn->query("SET NAMES UTF8");
+		$this->conn = db_connect();
+		$this->conn->query("SET NAMES UTF8");
 		$sql = 'select ';
 		$sql.= $table_name;
 		$sql.= ' from user where id_ustc="';
 		$sql.= $this->id_ustc;
 		$sql.= '";';
 		//echo_event("?",$sql);
-		$results = $conn->query($sql);
+		$results = $this->conn->query($sql);
 		return $results->fetch_assoc();
 	}
 	public function get($table_name){
 		return $this->query($table_name)[$table_name];
 	}
-
 	public function display_pensonal_data(){
 		$name = $this->get('name');
 		$mobile = $this->get('mobile');
@@ -42,6 +41,31 @@ class profile{
 			$content.= '| <a href="login.php">退出</a>';
 		}
 		echo_event('基本资料',$content);
+	}
+	public function display_practice_time(){
+		$durations = $this->conn->query('select duration from practice where id_p1="'.$this->id_ustc.'";');
+		$num = $durations->num_rows;
+		$sum=0;
+		for($i=0;$i<$num;$i++){
+			$delta = $durations->fetch_assoc()['duration'];
+			if ($delta==0){
+				$sum+=0.5;
+				
+			}
+			else $sum+=$delta;
+		}
+		if($i==0)$delta=0;
+		echo_br();
+		echo_short("累计练球时间:".$sum."小时");
+	}
+	public function display_game(){
+		$event = $this->conn->query('select * from game where id_p1="'.$this->id_ustc.'"
+		union
+		select * from game where id_p2="'.$this->id_ustc.'"
+		order by time desc;');
+		for($i=0;$i<$event->num_rows;$i++){
+			$name1 = $event->fetch_assoc()['name'];
+		}
 	}
 	function __get($name){
 		return $this->name;
@@ -53,11 +77,12 @@ class profile{
 		echo_event("id",$this->$id_ustc);
 	}
 }
-$ewind = new profile();
-set_html_header(0,"会员：".$ewind->get('name'));
+$profile = new profile();
+set_html_header(0,"会员：".$profile->get('name'));
 
-$ewind->display_pensonal_data();
-
-set_html_footer(0);
+$profile->display_pensonal_data();
+$profile->display_practice_time();
+$profile->display_game();
+set_html_footer(3);
 
 ?>

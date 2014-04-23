@@ -2,97 +2,221 @@
 class timeline
 {
 	private $conn;
-	private $event_count = 0;
 	private $event;
+	function __construct(){
+		date_default_timezone_set('PRC');
+		$this->conn = db_connect();
+		$this->conn->query("SET NAMES UTF8");
+		$this->create_single_event($this->conn->query("select * from game where value_free>0;"));
+		$this->create_double_event($this->conn->query("select * from game_double"));
+		$this->create_tour_event($this->conn->query("select * from game where value_tour>0;"));
+		$this->create_practice_event($this->conn->query("select * from practice"));
+		$this->sort();
+	}
 	private function create_single_event($results){
 		$num_results = $results->num_rows;
 		for($i=0;$i<$num_results;$i++){
-			$this->event[$event_count] = new singleEvent($results->fetch_assoc());
+			$tmp = new singleEvent($results->fetch_assoc());
+			$this->event_insert($tmp);
 		}
 	}
 	private function create_double_event($results){
 		$num_results = $results->num_rows;
 		for($i=0;$i<$num_results;$i++){
-			$this->event[$event_count] = new doubleEvent($results->fetch_assoc());
+			$tmp = new doubleEvent($results->fetch_assoc());
+			$this->event_insert($tmp);
 		}
 	}
 	private function create_tour_event($results){
 		$num_results = $results->num_rows;
 		for($i=0;$i<$num_results;$i++){
-			$this->event[$event_count] = new tourEvent($results->fetch_assoc());
+			$tmp = new tourEvent($results->fetch_assoc());
+			$this->event_insert($tmp);
 		}
 	}
 	private function create_practice_event($results){
 		$num_results = $results->num_rows;
 		for($i=0;$i<$num_results;$i++){
-			$this->event[$event_count] = new practiceEvent($results->fetch_assoc());
+			$tmp = new practiceEvent($results->fetch_assoc());
+			$this->event_insert($tmp);
 		}
 	}
-	function __construct(){
-		date_default_timezone_set('PRC');
-		$this->conn = db_connect();
-		$this->conn->query("SET NAMES UTF8");
-		$this->free_single = $this->create_single_event($this->conn->query("select * from game
-							where value_free>0;"));
-		$this->free_double = $this->create_double_event($this->conn->query("select * from game_double	where value_free>0;"));
-		$this->tour = $this->create_tour_event($this->conn->query("select * from game
-							where value_tour>0;"));
-		$this->practice = $this->create_practice_event($this->conn->query("select * from practice"));
+	private function event_insert($event){
+		do{
+			if($this->event[$event->time]){
+				$event->time+=1;
+			}
+			else break;
+		}while(1);
+		$this->event[$event->time] = $event;
 	}
-	//?
+	function sort(){
+		//按时间降序排列事件，并输出
+		krsort($this->event);
+		foreach($this->event as $key => $value){
+			echo_event($value->getTitle(),$value->getContent());
+		}
+	}
 }
-class event
+
+class event 
 {
-	public $id_p1;
 	public $time;
-	public $court;
-	function __construct($row){
-		getTitle($row);
-		getContent($row);
+	public $row;
+	public $title;
+	public $content;
+	public function __construct($row){
+		$this->row=$row;
+		$this->time=$this->row['time'];
+		//echo_event($this->getTitle(),$this->getContent());
 	}
-	public function getName($id){
+	public function getName($id_num){
+		//输入id_p1或id_p2，输出其对应的姓名
+		$this->id = $this->row[$id_num];
+		$this->conn = db_connect();
+		$this->conn ->query("SET NAMES UTF8");
 		
+		$this->result = $this->conn->query('select name from user where id_ustc="'.$this->id.'";');
+		if($this->result){
+			return $this->result->fetch_assoc()['name'];
+		}
+		else
+			return false;
 	}
-	public function displayEvent(){
-		
+	public function setProfileLink($id,$name){
+		$this->href = '<a href="profile.php?id_ustc=';
+		$this->href.= $id;
+		$this->href.= '">';
+		$this->href.= $name;
+		$this->href.= '</a>';
+		return $this->href;
+	}
+	public function countTime(){
+		$time = intval($this->row['time'],10);
+		$delta = (int)((time()/3600/24))-(int)(($time/3600/24));
+		if($delta==0){
+			$hour = (int)($time%(3600*24)/3600);
+			$delta = $hour."小时前";
+		}else{
+			$delta = $delta."天前";
+		}
+		return $delta;
+	}
+	public function getCourt(){
+		if($this->row['court']=='1'){
+			return "东区网球场";
+		}else return "西区网球场";
+	}
+	public function __get($value){
+		return $this->value;
 	}
 }
 class singleEvent extends event
 {
-	function getTitle($row){
-		
+	public function getTitle(){
+		$this->name1 = $this->getName('id_p1');
+		$this->name2 = $this->getName('id_p2');
+		$this->id_p1 = $this->row['id_p1'];
+		$this->id_p2 = $this->row['id_p2'];
+		$title = $this->setProfileLink($this->id_p1,$this->name1);
+		$title.= '&nbsp;';
+		$title.= $this->row['set_p1'];
+		$title.= '-';
+		$title.= $this->row['set_p2'];
+		$title.= '&nbsp;';
+		$title.= $this->setProfileLink($this->id_p2,$this->name2);
+		return $title;
 	}
-	function getContent($row){
-		
+	public function getContent(){
+		$content = $this->countTime().'，'.$this->getCourt().'，『'.$this->row['comment'].'』';
+		return $content;
 	}
 }
 class doubleEvent extends event
 {
-	function getTitle($row){
-		
+	function getTitle(){
+		$this->name1 = $this->getName('id_p1');
+		$this->name2 = $this->getName('id_p2');
+		$this->name3 = $this->getName('id_p3');
+		$this->name4 = $this->getName('id_p4');
+		$id_p1 = $this->row['id_p1'];
+		$id_p2 = $this->row['id_p2'];
+		$id_p3 = $this->row['id_p3'];
+		$id_p4 = $this->row['id_p4'];
+		$title = $this->setProfileLink($id_p1,$this->name1);
+		$title.= '&nbsp;';
+		$title.= $this->setProfileLink($id_p2,$this->name2);
+		$title.= '&nbsp;';
+		$title.= $this->row['set_p1n2'];
+		$title.= '-';
+		$title.= $this->row['set_p3n4'];
+		$title.= '&nbsp;';
+		$title.= $this->setProfileLink($id_p3,$this->name3);
+		$title.= '&nbsp;';
+		$title.= $this->setProfileLink($id_p4,$this->name4);
+		return $title;
 	}
-	function getContent($row){
-		
+	function getContent(){
+		$content = $this->countTime().'，'.$this->getCourt().'，『'.$this->row['comment'].'』';
+		return $content;
 	}
 }
 class tourEvent extends event
 {
-	function getTitle($row){
-		
+	function getTitle(){
+		$this->name1 = $this->getName('id_p1');
+		$this->name2 = $this->getName('id_p2');
+		$this->id_p1 = $this->row['id_p1'];
+		$this->id_p2 = $this->row['id_p2'];
+		$title = $this->setProfileLink($this->id_p1,$this->name1);
+		$title.= '&nbsp;';
+		$title.= $this->row['set_p1'];
+		$title.= '-';
+		$title.= $this->row['set_p2'];
+		$title.= '&nbsp;';
+		$title.= $this->setProfileLink($this->id_p2,$this->name2);
+		return $title;
 	}
-	function getContent($row){
-		
+	function getContent(){
+		$content = $this->countTime().'，【巡回赛】'.$this->getCourt();
+		return $content;
 	}
 }
 class practiceEvent extends event
 {
-	function getTitle($row){
-		
+	function getTitle(){
+		$name = $this->getName('id_p1');
+		return $this->setProfileLink($this->id_p1,$name)." 练了会球";
 	}
-	function getContent($row){
-		
+	function getContent(){
+		return $this->getItem().$this->getDuration();
+	}
+	function getDuration(){
+		if($this->row['duration']==0){
+			$str="坚持了半小时";
+		}else $str="坚持了".$this->row['duration']."小时";
+		return $str;
+	}
+	function getItem(){
+		$str = '练了';
+		$flag = $this->row['sum_item'];
+		//8421求和唯一性，判断正手、反手、发球、截击
+		if($flag%2==1){
+			$str.="正手、";
+		}
+		if($flag==3||$flag==6||$flag==7||$flag==10||$flag==11||$flag==14||$flag==15){
+			$str.="反手、";
+		}
+		if($flag==5||$flag==6||$flag==7||$flag==12||$flag==13||$flag==14||$flag==15){
+			$str.="发球、";
+		}
+		if($flag>=9){
+			$str.="截击、";
+		}
+		return $str;
 	}
 }
+
 function generate_title($id_p1,$id_p2,$name1,$name2,$set_p1,$set_p2){
 	$output = '';
 	$output.='<a href="profile.php?id_ustc=';
@@ -152,7 +276,6 @@ function display_timeline_old(){
 }
 function display_timeline(){
 	$timeline = new timeline();
-	
 }
 function display_table($flag){
 	?>
