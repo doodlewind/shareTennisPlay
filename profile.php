@@ -55,7 +55,6 @@ class profile{
 			else $sum+=$delta;
 		}
 		if($i==0)$delta=0;
-		echo_br();
 		echo_short("累计练球时间:".$sum."小时");
 	}
 	public function display_game(){
@@ -78,7 +77,7 @@ class profile{
 	}
 }
 $profile = new profile();
-set_html_header(0,"会员：".$profile->get('name'));
+set_html_header('profile',"会员：".$profile->get('name'));
 
 $profile->display_pensonal_data();
 $profile->display_practice_time();

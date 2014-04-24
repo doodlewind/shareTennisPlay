@@ -26,27 +26,39 @@ function display_register_form(){
 function display_login_form(){
 	//登录表单
 ?>
+
 <form action="member.php"method="post">
 				<div class="ui-grid-a">
 					<div class="ui-block-a">
-						<img src="banner.jpg"width="80%">
+						<img src="banner.jpg"width="90%">
 					</div>
 					<div class="ui-block-b">
+					    <div >
 						<fieldset data-role="controlgroup" data-mini="true">
-							<div>
+							<div class="ui-bar ui-bar-a">
 							<legend>学号</legend>
 							<input data-mini="true" type="text"name="id_ustc">
 							<legend>密码</legend>
 							<input data-mini="true"type="password"name="passwd">
 							<br/>
-							<input type="submit"value="登录！">
+							<input type="submit"value="登录">
 							</div>
 						</fieldset>
+						</div>
 					</div>
 				</div>
 </form>
 
 <?php
+echo_event('欢迎使用科大网协Web App','
+	<legend>
+	<a href="about.html">关于这里</a>
+	&nbsp;|&nbsp;
+	<a href="https://tennis.blog.ustc.edu.cn/about">关于网协</a>
+	&nbsp;|&nbsp;
+	<a href="http://bbs.ustc.edu.cn/">瀚海星云</a>
+	</legend>
+');
 }
 function display_date_button($flag){
 	//flag取值  1:month 2:day 3:hour
@@ -109,7 +121,7 @@ function display_date_button($flag){
 function echo_event($title,$content){
 	//输出一条由标题和内容组成的消息
 ?>
-	 <br/>
+	 <fieldset data-role="controlgroup" data-mini="true">
 	 <div class="ui-corner-all custom-corners">
 	   <div class="ui-bar ui-bar-a">
 	     <h3><?php echo $title;?></h3>
@@ -118,21 +130,31 @@ function echo_event($title,$content){
 	     <p><?php echo $content;?></p>
 	   </div>
 	 </div>
+	 </fieldset>
 <?php
 }
-function echo_br(){
-	echo '<br/>';
+function echo_button_id($flag,$flag2){
+	//flag与set_html_header相同，flag2有a和div两种
+	if($flag2=='a')
+		echo '<a href="#'.$flag.'"data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all  ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">练球</a>';
+	else echo '<div id="'.$flag.'"data-role="popup"data-theme="a"class="ui-corner-all">';
 }
 function echo_short($content){
 	?>
+   <fieldset data-role="controlgroup" data-mini="true">
    <div class="ui-bar ui-bar-a">
      <h3><?php echo $content;?></h3>
    </div>
+   </fieldset>
 <?php
 }
 function set_html_header($flag,$title){
-	//0类不含header按钮，1类不含积分排名所用navbar
-	//2类带自由赛navbar，3类带巡回赛navbar
+	//--flag取值--
+	//banner
+	//member
+	//rank_free
+	//rank_tour
+	//profile
 ?>
 <!DOCTYPE html>
 <head>
@@ -144,31 +166,31 @@ function set_html_header($flag,$title){
 <style>
 .ui-table-columntoggle-btn {
     display: none !important;
-}	
+}
+body {image:url("localhost/banner.jpg");}
 </style>
 <title><?php echo $title;?></title>
 </head>
-
-
 <body>
 <div data-role="page">
 	<div data-role="header" data-position="fixed">
 <?php
-	if($flag==0){
+	if($flag=='banner'){
 ?>
-		 <h1><?php echo $title;?></h1>
+	<h1><?php echo $title;?></h1>
  	</div><!--header-->
- 	<div role="main" class="ui-content">
-		 
+ 	<div role="main" class="ui-content">	 
 <?php
 		return true;
-	}	
+	}
 ?>		
-		<a href="upload_single.php" class="ui-btn ui-corner-all  ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a">战果</a>
+		<a href="upload_single.php"data-prefetch="true"class="ui-btn ui-corner-all  ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a">战果</a>
 		<h1><?php echo $title;?></h1>
-		<!--练球战果按钮--> 
-		<a href="#practice" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all  ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">练球</a>
-		<div data-role="popup" id="practice" data-theme="a" class="ui-corner-all">
+		<!--练球按钮-->
+		<?php echo_button_id($flag,'a');?>
+		
+		<?php echo_button_id($flag,'div');?>
+			
 	    <form action="practice_upload.php"method="post">
 	        <div style="padding:10px 20px;">
 				<fieldset data-role="controlgroup" data-mini="true"data-type="horizontal">
@@ -237,21 +259,21 @@ function set_html_header($flag,$title){
 	</div>
 		<!--练球按钮--> 
 <?php
-	if($flag==2){
+	if($flag=='rank_free'){
 ?>
 	   <div data-role="navbar">
 	           <ul>
 	               <li><a href="#"class="ui-btn-active">自由赛积分</a></li>
-	               <li><a href="rank_tour.php">巡回赛积分</a></li>
+	               <li><a href="rank_tour.php"data-prefetch="true">巡回赛积分</a></li>
 	           </ul>
 	       </div><!-- /navbar -->
 <?php
 	}	
-	if($flag==3){
+	if($flag=='rank_tour'){
 ?>
 	   <div data-role="navbar">
 	           <ul>
-	               <li><a href="rank_free.php">自由赛积分</a></li>
+	               <li><a href="rank_free.php"data-prefetch="true">自由赛积分</a></li>
 	               <li><a href="#"class="ui-btn-active">巡回赛积分</a></li>
 	           </ul>
 	       </div><!-- /navbar -->
@@ -287,23 +309,23 @@ function set_html_footer($flag){
 <?php
 	if($flag==1){
 ?>	
-                <li><a href="#" data-icon="bars" class="ui-btn-active">动态</a></li>
-                <li><a href="rank_free.php" data-icon="star" >积分</a></li>
-                <li><a href="profile.php" data-icon="user">会员</a></li>
+                <li><a href="#" data-icon="bars" class="ui-btn-active"data-prefetch="true">动态</a></li>
+                <li><a href="rank_free.php" data-icon="star" data-prefetch="true">积分</a></li>
+                <li><a href="profile.php" data-icon="user"data-prefetch="true">会员</a></li>
 <?php
 	}
 	else if($flag==2){
 ?>
-                <li><a href="member.php" data-icon="bars">动态</a></li>
-                <li><a href="#" data-icon="star"class="ui-btn-active">积分</a></li>
-                <li><a href="profile.php" data-icon="user">会员</a></li>
+                <li><a href="member.php" data-icon="bars"data-prefetch="true">动态</a></li>
+                <li><a href="#" data-icon="star"class="ui-btn-active"data-prefetch="true">积分</a></li>
+                <li><a href="profile.php" data-icon="user"data-prefetch="true">会员</a></li>
 <?php
 	}
 	else if($flag==3){
 ?>
-                <li><a href="member.php" data-icon="bars" >动态</a></li>
-                <li><a href="rank_free.php" data-icon="star" >积分</a></li>
-                <li><a href="#"class="ui-btn-active" data-icon="user">会员</a></li>
+                <li><a href="member.php" data-icon="bars" data-prefetch="true">动态</a></li>
+                <li><a href="rank_free.php" data-icon="star" data-prefetch="true">积分</a></li>
+                <li><a href="#"class="ui-btn-active" data-icon="user"data-prefetch="true">会员</a></li>
 <?php
 	}
 ?>
