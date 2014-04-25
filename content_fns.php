@@ -52,7 +52,11 @@ class timeline
 	}
 	function sort(){
 		//按时间降序排列事件，并输出
-		krsort($this->event);
+		if($this->event)krsort($this->event);
+		else {
+			echo_short('还没有动态');
+			return;
+		}
 		foreach($this->event as $key => $value){
 			echo_event($value->getTitle(),$value->getContent());
 		}

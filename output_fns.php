@@ -5,7 +5,7 @@ function display_register_form(){
 <form action="register_verify.php"method="post">
 	<div class="ui-grid-a">
 		<div class="ui-block-a">
-			<img src="banner.jpg"width="80%">
+			<img src="banner.jpg"width="100%">
 		</div>
 		<div class="ui-block-b">
 			<fieldset data-role="controlgroup" data-mini="true">
@@ -14,8 +14,14 @@ function display_register_form(){
 					<legend>姓名</legend><input type="text"name="name"placeholder="您的真实姓名">
 					<legend>手机</legend><input type="text"name="mobile"placeholder="您的联系方式">
 					<legend>密码</legend><input type="password"name="passwd"placeholder="长度在6-16位之间">
-					<input type="submit"value="注册">
-					<a href="login.php"class="ui-button">登录</a>
+					<div class="ui-grid-a">
+						<div class="ui-block-a">
+					<a class="ui-btn"href="login.php">返回</a></button>
+					</div>
+					<div class="ui-block-b">
+						<input type="submit"value="注册">
+					</div>
+					</div>
 				</div>
 			</fieldset>
 		</div>
@@ -30,7 +36,7 @@ function display_login_form(){
 <form action="member.php"method="post">
 				<div class="ui-grid-a">
 					<div class="ui-block-a">
-						<img src="banner.jpg"width="90%">
+						<img src="banner.jpg"width="100%">
 					</div>
 					<div class="ui-block-b">
 					    <div >

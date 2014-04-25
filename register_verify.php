@@ -1,6 +1,6 @@
 <?php
 	require_once('tennis_fns.php');
-	$id_ustc = $_POST['id_ustc'];
+	$id_ustc = strtoupper($_POST['id_ustc']);
 	$name = $_POST['name'];
 	$mobile = $_POST['mobile'];
 	$passwd = $_POST['passwd'];
@@ -30,7 +30,7 @@
 		
 		//布置成员页面
 		set_html_header(0,'注册成功');
-		echo_event('恭喜~','注册成功，<a href="login.php">登录</a>');
+		echo_event('恭喜~','注册成功，回<a href="login.php">登录页</a>');
 		set_html_footer(0);
 	}
 	catch (Exception $e) {

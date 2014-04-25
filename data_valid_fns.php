@@ -12,14 +12,12 @@ function filled_out($form_vars) {
 function valid_id_ustc($id_ustc){
 	//检验学号有效性，不区分大小写
 	return true;
-	/*
-	if(ereg('([Pp][Bb]|[Ss][Aa]|[Ss][Cc])[0-1]([0-9]){7}',$id_ustc)){
+	if(ereg('([a-zA-Z][a-zA-Z])[0-1]([0-9]){7}',$id_ustc)){
 		return true;
 	}
 	else{
 		return false;
 	}
-	*/
 }
 
 function valid_mobile($mobile){
