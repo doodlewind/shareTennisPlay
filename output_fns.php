@@ -50,7 +50,7 @@ function display_login_form(){
 </form>
 
 <?php
-echo_event('欢迎使用科大网协Web App','
+echo_short('
 	<legend>
 	<a href="register.php">会员注册</a>
 	&nbsp;|&nbsp;
@@ -166,8 +166,8 @@ function set_html_header($flag,$title){
 <link rel="apple-touch-icon-precomposed" sizes="72x72" href="pic/icon-72.png">
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="pic/icon-114.png">
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="pic/icon-144.png">
-<link rel="apple-touch-startup-image" sizes="640x920" href="pic/startup-640x920.png" media="screen and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)">
-<link rel="apple-touch-startup-image" sizes="320x460" href="pic/startup-320x460.png" media="screen and (max-device-width: 320)">
+<link rel="apple-touch-startup-image" sizes="640x920" href="pic/startup-640x920.jpg" media="screen and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" sizes="320x460" href="pic/startup-320x460.jpg" media="screen and (max-device-width: 320)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
@@ -302,7 +302,6 @@ function set_html_footer($flag){
 ?>
 	</div><!--main-->
 	<div data-role="footer"data-position="fixed">
-		<h1>USTC Tennis 2014</h1>
 	</div><!--footer-->
 </div><!--page-->
 </body>

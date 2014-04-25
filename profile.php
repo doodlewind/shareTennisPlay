@@ -78,7 +78,7 @@ class profile{
 }
 $profile = new profile();
 set_html_header('profile',"会员：".$profile->get('name'));
-
+check_valid_id();
 $profile->display_pensonal_data();
 $profile->display_practice_time();
 $profile->display_game();
