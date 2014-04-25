@@ -32,7 +32,6 @@ function display_register_form(){
 function display_login_form(){
 	//登录表单
 ?>
-
 <form action="member.php"method="post">
 				<div class="ui-grid-a">
 					<div class="ui-block-a">
@@ -181,7 +180,14 @@ function set_html_header($flag,$title){
 .ui-table-columntoggle-btn {
     display: none !important;
 }
-body {image:url("localhost/banner.jpg");}
+/*
+.ui-page{
+    background: url(pic/startup-320x460.jpg)!important;
+    background-repeat:no-repeat !important;
+    background-position:center center!important;
+    background-size:cover!important;  
+}
+*/
 </style>
 <title><?php echo $title;?></title>
 </head>
@@ -362,7 +368,7 @@ function display_single_form(){
 <style>
 .ui-table-columntoggle-btn {
     display: none !important;
-}	
+}
 </style>
 <title>单打上传</title>
 </head>
