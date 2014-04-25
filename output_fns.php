@@ -9,19 +9,19 @@ function display_register_form(){
 		</div>
 		<div class="ui-block-b">
 			<fieldset data-role="controlgroup" data-mini="true">
-				<div>
-					<legend>学号</legend><input type="text"name="id_ustc">
-					<legend>姓名</legend><input type="text"name="name">
-					<legend>手机</legend><input type="text"name="mobile">
-					<legend>密码</legend><input type="password"name="passwd">
-					<input type="submit"value="注册！">
+				<div class="ui-bar ui-bar-a">
+					<legend>学号</legend><input type="text"name="id_ustc"placeholder="不区分大小写">
+					<legend>姓名</legend><input type="text"name="name"placeholder="您的真实姓名">
+					<legend>手机</legend><input type="text"name="mobile"placeholder="您的联系方式">
+					<legend>密码</legend><input type="password"name="passwd"placeholder="长度在6-16位之间">
+					<input type="submit"value="注册">
+					<a href="login.php"class="ui-button">登录</a>
 				</div>
 			</fieldset>
-
-		
 		</div>
 </form>
 <?php
+
 }//函数结束
 function display_login_form(){
 	//登录表单
@@ -52,7 +52,7 @@ function display_login_form(){
 <?php
 echo_event('欢迎使用科大网协Web App','
 	<legend>
-	<a href="about.html">关于这里</a>
+	<a href="register.php">会员注册</a>
 	&nbsp;|&nbsp;
 	<a href="https://tennis.blog.ustc.edu.cn/about">关于网协</a>
 	&nbsp;|&nbsp;
@@ -159,10 +159,19 @@ function set_html_header($flag,$title){
 <!DOCTYPE html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="../jquery/jquery.mobile-1.4.0.css">
 <script src="../jquery/jquery-2.0.3.min.js"></script>
 <script src="../jquery/jquery.mobile-1.4.0.js"></script>
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="pic/icon-57.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="pic/icon-72.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="pic/icon-114.png">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="pic/icon-144.png">
+<link rel="apple-touch-startup-image" sizes="640x920" href="pic/startup-640x920.png" media="screen and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" sizes="320x460" href="pic/startup-320x460.png" media="screen and (max-device-width: 320)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1.0, maximum-scale=1, user-scalable=no">
 <style>
 .ui-table-columntoggle-btn {
     display: none !important;
@@ -304,7 +313,7 @@ function set_html_footer($flag){
 ?>
 	</div><!--main-->
 	<div data-role="footer" data-position="fixed">
-	    <div data-role="navbar">
+	    <div data-role="navbar"data-iconpos="left">
 			<ul>
 <?php
 	if($flag==1){

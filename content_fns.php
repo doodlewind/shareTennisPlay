@@ -216,7 +216,7 @@ class practiceEvent extends event
 		return $str;
 	}
 }
-
+/*
 function generate_title($id_p1,$id_p2,$name1,$name2,$set_p1,$set_p2){
 	$output = '';
 	$output.='<a href="profile.php?id_ustc=';
@@ -274,12 +274,13 @@ function display_timeline_old(){
 		echo_event($title,$content);
 	}
 }
+*/
 function display_timeline(){
 	$timeline = new timeline();
 }
 function display_table($flag){
 	?>
-<table data-role="table" id="table-custom-2" data-mode="columntoggle" class="ui-body-d ui-shadow table-stripe ui-responsive"  data-column-popup-theme="a">
+<table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d ui-shadow table-stripe ui-responsive"data-column-popup-theme="a">
 			 <thead>
 			 <tr class="ui-bar-d">
 				 <th>名次</th>
@@ -321,6 +322,9 @@ function display_table($flag){
 	
 	$row = $result->fetch_assoc();
 	$count = $row['count'];
+	//hotfix
+	if($i==1){$i=2;}
+	
 	$rank = (int)(($count/($i-1))*100);
 	//总人数由i求出，将受表格行数影响，需要改进
 	if($flag==1)echo_event("我的自由赛","".$my_total_score."分，排第".$count."名，前".$rank."%");

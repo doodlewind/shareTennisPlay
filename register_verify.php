@@ -9,13 +9,13 @@
 	try{
 		//表格完整性
 		if(!filled_out($_POST)) {
-			throw new Exception('Sorry, 你还没填完整表格呢~');
+			throw new Exception('你还没填完整表格呢，<a href="register.php">返回</a>');
 		}
 		if(!valid_id_ustc($id_ustc)) {
-			throw new Exception('你输入的学号貌似不对哦~');
+			throw new Exception('你输入的学号貌似不对哦，<a href="register.php">返回</a>');
 		}
 		if(!valid_mobile($mobile)) {
-			throw new Exception('这个手机号恐怕打不通哦~');
+			throw new Exception('这个手机号恐怕打不通哦，<a href="register.php">返回</a>');
 		}
 		//密码长度在6-16位之间
 		/*
@@ -29,8 +29,8 @@
 		$_SESSION['valid_id_ustc'] = $id_ustc;
 		
 		//布置成员页面
-		set_html_header(0,'注册成功~');
-		echo_event('恭喜~','注册成功，点<a href="login.php">这里</a>登录');
+		set_html_header(0,'注册成功');
+		echo_event('恭喜~','注册成功，<a href="login.php">登录</a>');
 		set_html_footer(0);
 	}
 	catch (Exception $e) {
