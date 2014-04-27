@@ -7,10 +7,10 @@ class timeline
 		date_default_timezone_set('PRC');
 		$this->conn = db_connect();
 		$this->conn->query("SET NAMES UTF8");
-		$this->create_single_event($this->conn->query("select * from game where value_free>0;"));
-		$this->create_double_event($this->conn->query("select * from game_double"));
-		$this->create_tour_event($this->conn->query("select * from game where value_tour>0;"));
-		$this->create_practice_event($this->conn->query("select * from practice"));
+		$this->create_single_event($this->conn->query("select * from result_free;"));
+		$this->create_double_event($this->conn->query("select * from game_double;"));
+		$this->create_tour_event($this->conn->query("select * from result_tour;"));
+		$this->create_practice_event($this->conn->query("select * from practice;"));
 		$this->sort();
 	}
 	private function create_single_event($results){
@@ -74,6 +74,40 @@ class event
 		$this->time=$this->row['time'];
 		//echo_event($this->getTitle(),$this->getContent());
 	}
+	public function setProfileLink($id,$name){
+		$this->href = '<a href="profile.php?id_ustc=';
+		$this->href.= $id;
+		$this->href.= '"data-ajax="false">';
+		$this->href.= $name;
+		$this->href.= '</a>';
+		return $this->href;
+	}
+	public function countTime(){
+		$time = intval($this->row['time'],10);
+		$delta = (int)((time()/3600/24))-(int)(($time/3600/24));
+		if($delta==0){
+			$hour = (int)($time%(3600*24)/3600);
+			$delta = $hour."小时前";
+		}else{
+			if($delta > 3){
+				if($delta > 365){
+					$delta = "1年前";
+				}
+				else $delta = date('m-d',$time);	
+			}else
+			$delta = $delta."天前";
+		}
+		
+		return $delta;
+	}
+	public function getCourt(){
+		if($this->row['court']=='1'){
+			return "东区网球场";
+		}else return "西区网球场";
+	}
+	public function __get($value){
+		return $this->value;
+	}
 	public function getName($id_num){
 		//输入id_p1或id_p2，输出其对应的姓名
 		$this->id = $this->row[$id_num];
@@ -87,39 +121,12 @@ class event
 		else
 			return false;
 	}
-	public function setProfileLink($id,$name){
-		$this->href = '<a href="profile.php?id_ustc=';
-		$this->href.= $id;
-		$this->href.= '">';
-		$this->href.= $name;
-		$this->href.= '</a>';
-		return $this->href;
-	}
-	public function countTime(){
-		$time = intval($this->row['time'],10);
-		$delta = (int)((time()/3600/24))-(int)(($time/3600/24));
-		if($delta==0){
-			$hour = (int)($time%(3600*24)/3600);
-			$delta = $hour."小时前";
-		}else{
-			$delta = $delta."天前";
-		}
-		return $delta;
-	}
-	public function getCourt(){
-		if($this->row['court']=='1'){
-			return "东区网球场";
-		}else return "西区网球场";
-	}
-	public function __get($value){
-		return $this->value;
-	}
 }
 class singleEvent extends event
 {
 	public function getTitle(){
-		$this->name1 = $this->getName('id_p1');
-		$this->name2 = $this->getName('id_p2');
+		$this->name1 = $this->row['name_p1'];
+		$this->name2 = $this->row['name_p2'];
 		$this->id_p1 = $this->row['id_p1'];
 		$this->id_p2 = $this->row['id_p2'];
 		$title = $this->setProfileLink($this->id_p1,$this->name1);
@@ -132,7 +139,12 @@ class singleEvent extends event
 		return $title;
 	}
 	public function getContent(){
-		$content = $this->countTime().'，'.$this->getCourt().'，『'.$this->row['comment'].'』';
+		$comment = $this->row['comment'];
+		if($comment=="NULL"){
+			$content = $this->countTime().'，'.$this->getCourt();
+		}
+		else 
+			$content = $this->countTime().'，'.$this->getCourt().'，『'.$comment.'』';
 		return $content;
 	}
 }
@@ -168,8 +180,8 @@ class doubleEvent extends event
 class tourEvent extends event
 {
 	function getTitle(){
-		$this->name1 = $this->getName('id_p1');
-		$this->name2 = $this->getName('id_p2');
+		$this->name1 = $this->row['name_p1'];
+		$this->name2 = $this->row['name_p2'];
 		$this->id_p1 = $this->row['id_p1'];
 		$this->id_p2 = $this->row['id_p2'];
 		$title = $this->setProfileLink($this->id_p1,$this->name1);
@@ -190,10 +202,10 @@ class practiceEvent extends event
 {
 	function getTitle(){
 		$name = $this->getName('id_p1');
-		return $this->setProfileLink($this->id_p1,$name)." 练了会球";
+		return $this->setProfileLink($this->id,$name)." 练了球";
 	}
 	function getContent(){
-		return $this->getItem().$this->getDuration();
+		return $this->countTime()."，".$this->getItem().$this->getDuration();
 	}
 	function getDuration(){
 		if($this->row['duration']==0){
@@ -208,13 +220,13 @@ class practiceEvent extends event
 		if($flag%2==1){
 			$str.="正手、";
 		}
-		if($flag==3||$flag==6||$flag==7||$flag==10||$flag==11||$flag==14||$flag==15){
+		if($flag==2||$flag==3||$flag==6||$flag==7||$flag==10||$flag==11||$flag==14||$flag==15){
 			$str.="反手、";
 		}
-		if($flag==5||$flag==6||$flag==7||$flag==12||$flag==13||$flag==14||$flag==15){
+		if($flag==4||$flag==5||$flag==6||$flag==7||$flag==12||$flag==13||$flag==14||$flag==15){
 			$str.="发球、";
 		}
-		if($flag>=9){
+		if($flag>=8){
 			$str.="截击、";
 		}
 		return $str;
@@ -283,6 +295,7 @@ function display_timeline(){
 	$timeline = new timeline();
 }
 function display_table($flag){
+	//flag=1，自由赛 flag=2，巡回赛
 	?>
 <table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d ui-shadow table-stripe ui-responsive"data-column-popup-theme="a">
 			 <thead>
@@ -296,15 +309,18 @@ function display_table($flag){
 <?php
 	//generate <tr> and <td>
 		$conn = db_connect();
-		$conn->query('SET NAMES UTF8');
-		
-		if($flag==1) $result = $conn->query('select * from score_free;');
-		else $result = $conn->query('select * from score_tour order by total_score desc;');
-		
-		$num_results = $result->num_rows;
+		if($flag==1){
+			$sql = "select * from sum_free;";
+		}else 
+			$sql = "select * from sum_tour;";
+		$stmt = $conn->prepare($sql);
+		$stmt->execute();
+		$results = $stmt -> get_result();
+
+		$num_results = $results->num_rows;
 		for ($i=1; $i <= $num_results;$i++){
-			$row = $result->fetch_assoc();
-			echo '<tr><td>'.$i.'</td><td>'.$row['name'].'</td><td>'.$row['total_score'].'</td></tr>';
+			$row = $results->fetch_assoc();
+			echo '<tr><td>'.$i.'</td><td>'.$row['name'].'</td><td>'.$row['sum'].'</td></tr>';
 		}
 	?>
 			</tbody>
@@ -312,26 +328,51 @@ function display_table($flag){
 			</br>
 <?php
 	//generate game info of current user
-	$id_ustc = $_SESSION['valid_id_ustc'];
+	if($flag==1){
+		//由id_ustc获得姓名
+		$sql = "select name from user where id_ustc=(?);";
+		$stmt = $conn->prepare($sql);
+		$id_ustc = $_SESSION['valid_id_ustc'];
+		$stmt->bind_param("s",$id_ustc);
+		$stmt->execute();
+		$results = $stmt->get_result();
+		$name = $results->fetch_assoc()['name'];
 	
-	if($flag==1)$result = $conn->query('select total_score from score_free where id_p1= "'.$id_ustc.'";');
-	else $result = $conn->query('select total_score from score_tour where id_p1= "'.$id_ustc.'";');
-	//get name of current user, then query to count his rank
+		//获得总积分
+		$sql = "select sum from sum_free where name=(?)";
+		$stmt = $conn->prepare($sql);
+		$stmt->bind_param("s",$name);
+		$stmt->execute();
+		$results = $stmt->get_result();
+		$my_total_score =  $results->fetch_assoc()['sum'];
 	
-	$row = $result->fetch_assoc();
-	$my_total_score = $row['total_score'];
+		//获得总排名
+		$results = $conn->query('select count(sum)+1 as rank from sum_free where sum > (select sum from sum_free where name="'.$name.'");');
+		$count = $results->fetch_assoc()['rank'];
+		echo_event("我的自由赛","".$my_total_score."分，排第".$count."名");
+	}
+	else {
+		//由id_ustc获得姓名
+		$sql = "select name from user where id_ustc=(?);";
+		$stmt = $conn->prepare($sql);
+		$id_ustc = $_SESSION['valid_id_ustc'];
+		$stmt->bind_param("s",$id_ustc);
+		$stmt->execute();
+		$results = $stmt->get_result();
+		$name = $results->fetch_assoc()['name'];
 	
-	if($flag==1)$result = $conn->query('select count(total_score) as count from score_free where total_score >="'.$my_total_score.'";');
-	else $result = $conn->query('select count(total_score) as count from score_tour where total_score >="'.$my_total_score.'";');
+		//获得总积分
+		$sql = "select sum from sum_tour where name=(?)";
+		$stmt = $conn->prepare($sql);
+		$stmt->bind_param("s",$name);
+		$stmt->execute();
+		$results = $stmt->get_result();
+		$my_total_score =  $results->fetch_assoc()['sum'];
 	
-	$row = $result->fetch_assoc();
-	$count = $row['count'];
-	//hotfix
-	if($i==1){$i=2;}
-	
-	$rank = (int)(($count/($i-1))*100);
-	//总人数由i求出，将受表格行数影响，需要改进
-	if($flag==1)echo_event("我的自由赛","".$my_total_score."分，排第".$count."名，前".$rank."%");
-	else echo_event("我的巡回赛","".$my_total_score."分，排第".$count."名，前".$rank."%");
+		//获得总排名
+		$results = $conn->query('select count(sum)+1 as rank from sum_tour where sum > (select sum from sum_tour where name="'.$name.'");');
+		$count = $results->fetch_assoc()['rank'];
+		echo_event("我的巡回赛","".$my_total_score."分，排第".$count."名");
+	}
 }
 ?>

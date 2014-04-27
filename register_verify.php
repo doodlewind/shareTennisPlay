@@ -27,16 +27,22 @@
 		register($id_ustc,$name,$mobile,$passwd);
 		//注册会话变量
 		$_SESSION['valid_id_ustc'] = $id_ustc;
-		
 		//布置成员页面
-		set_html_header(0,'注册成功');
-		echo_event('恭喜~','注册成功，回<a href="login.php">登录页</a>');
-		set_html_footer(0);
+		set_html_header();
+		set_page_header('banner',"USTC-TENNIS");
+		
+		echo_event('恭喜~','注册成功，<a href="member.php"data-ajax="false">登录</a>');
+		
+		set_page_footer(0);
+		set_html_footer();
 	}
 	catch (Exception $e) {
-		set_html_header(0,'出了点问题...');
+		set_html_header();
+		set_page_header('banner',"USTC-TENNIS");
+		
 		echo_event('错误提示',$e->getMessage());
-		set_html_footer(0);
+		set_page_footer(0);
+		set_html_footer();
 		exit;
 	}
 

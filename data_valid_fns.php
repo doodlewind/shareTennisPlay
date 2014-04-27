@@ -23,13 +23,11 @@ function valid_id_ustc($id_ustc){
 function valid_mobile($mobile){
 	//检验手机号有效性
 	return true;
-	/*
 	if(ereg('1([0-9]){10}',$mobile)){
 		return true;
 	}
 	else{
 		return false;
 	}
-	*/
 }
 ?>
