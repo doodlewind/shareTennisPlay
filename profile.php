@@ -11,6 +11,7 @@ class profile{
 	public $game_attend;
 	public $game_win;
 	public function __construct(){
+		date_default_timezone_set('PRC');
 		$this->id_ustc = $_GET['id_ustc'];
 		if(!$this->id_ustc){
 			//点击footer按钮访问profile.php时，默认显示当前用户的profile
@@ -23,7 +24,7 @@ class profile{
 	}
 	public function display_pensonal_data(){
 		$this->mobile = $this->row['mobile'];
-		$content = ''.$this->name.' · '.$this->mobile.' · <a href="member.php"data-ajax="false">返回</a> ';
+		$content = ''.$this->name.' · '.$this->mobile.' · <a href="member.php#rank_tour"data-ajax="false">返回</a> ';
 		echo_short($content);
 	}
 	/*public function display_practice_time(){
@@ -42,24 +43,32 @@ class profile{
 		echo_short("累计练球时间:".$sum."小时");
 	}*/
 	public function display_game_tour(){
-		$event = $this->conn->query('select * from result_tour where name_p1="'.$this->name.'" or name_p2="'.$this->name.'"
-order by time desc;');
-		$str = "<table>";
-		$num = $event->num_rows;
-		if($num == 0){
-			echo_event("巡回赛战绩",'暂无');
-			return;
+			$event = $this->conn->query('select * from result_tour where name_p1="'.$this->name.'" or name_p2="'.$this->name.'"
+	order by time desc;');
+			
+			$event_old = $this->conn->query('select * from record_tour where name = "'.$this->name.'";');
+			$num = $event_old->num_rows;
+			$str='<table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
+			for($i=0;$i<$num;$i++){
+				$result = $event_old->fetch_assoc();
+				$str.= '<tr><td>';
+				$str.= date('m月',$result['time'])."</td><td>";
+				$str.= $result['stat']."</td><td><b>";
+				$str.= $result['value']."分";
+				$str.= '</b></td></tr>';
+			}	
+			$str.= '</table><br/><table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
+			$num = $event->num_rows;
+			for($i=0;$i<$num;$i++){
+				$str.=$this->display_row($event);
+			}
+			$str.="</table>";
+			echo_event("巡回赛战绩",$str);
 		}
-		for($i=0;$i<$num;$i++){
-			$str.=$this->display_row($event);
-		}
-		$str.="</table>";
-		echo_event("巡回赛战绩",$str);
-	}
 	public function display_game_free(){
 		$event = $this->conn->query('select * from result_free where name_p1="'.$this->name.'" or name_p2="'.$this->name.'"
 order by time desc;');
-		$str = "<table>";
+		$str = '<table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
 		$num = $event->num_rows;
 		if($num == 0){
 			echo_event("自由赛战绩",'暂无');
@@ -102,7 +111,7 @@ order by time desc;');
 		if($name_p1==$this->name){
 			$value = $value_p1;
 		}else $value = $value_p2;
-		return "<tr><td>".$time."</td><td>&nbsp;".$name_p1."</td><td>&nbsp;&nbsp<b>".$set_p1."-".$set_p2."</b></td><td>&nbsp;&nbsp".$name_p2."</td><td><b>&nbsp;(".$value."分)</b></td></tr>";
+		return "<tr><td>".$time."</td><td>".$name_p1."</td><td><b>".$set_p1."-".$set_p2."</b></td><td>".$name_p2."</td><td><b>".$value."分</b></td></tr>";
 	}
 }
 

@@ -37,7 +37,7 @@ function upload_free($flag){
 		//echo($id_p1." ".$name_p2." ".$month." ".$day." ".$hour." ".$set_p1." ".$set_p2." ".$court." ".$comment);
 		//$time为当前年份与表单中month、day、hour一起生成的上传时间，分秒均取零
 		$result = $conn->query('insert into game_free values(
-			NULL,"'.$time.'","'.$id_p1.'","'.$id_p2.'","'.$set_p1.'","'.$set_p2.'","'.$value_p1.'","'.$value_p2.'"."'.$court.'","'.$comment.'");');
+			NULL,"'.$time.'","'.$id_p1.'","'.$id_p2.'","'.$set_p1.'","'.$set_p2.'","'.$value_p1.'","'.$value_p2.'","'.$court.'","'.$comment.'");');
 	}else{
 		$name_p3 = $_POST['name_p3'];
 		$name_p4 = $_POST['name_p4'];
@@ -60,7 +60,7 @@ function upload_free($flag){
 	if (!$result) {
 		//throw new Exception ($id_p4.'insert into game_double values(
 		//			NULL,"'.$time.'","'.$id_p1.'","'.$id_p2.'","'.$id_p3.'","'.$id_p4.'","'.$set_p1n2.'","'.$set_p3n4.'","'.$value_free.'","'.$court.'","'.$comment.'");'.'请勿重复刷新本页，<a href="member.php">返回</a>');
-		throw new Exception ('请勿重复刷新本页，<a href="member.php"data-ajax="false">返回</a>');
+		throw new Exception ('请勿重复刷新本页，<a href="upload.php#single"data-ajax="false">返回</a>');
 	}
 	return true;
 }

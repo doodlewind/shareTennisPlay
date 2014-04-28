@@ -17,7 +17,7 @@
 		//布置成员页面
 		set_html_header();
 		set_page_header('banner','上传成功！');
-		echo_event('提示','记录已上传，<a href="member.php"data-ajax="false">返回</a>');
+		echo_event('提示','记录已上传，<a href="member.php#member"data-ajax="false">返回</a>');
 		
 		set_page_footer(0);
 		set_html_footer();

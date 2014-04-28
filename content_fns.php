@@ -294,7 +294,17 @@ function display_timeline_old(){
 function display_timeline(){
 	$timeline = new timeline();
 }
-function display_table($flag){
+/*
+function setProfileLink($id,$name){
+		$href = '<a href="profile.php?id_ustc=';
+		$href.= $id;
+		$href.= '"data-ajax="false">';
+		$href.= $name;
+		$href.= '</a>';
+		return $href;
+}
+*/
+function display_free_table(){
 	//flag=1，自由赛 flag=2，巡回赛
 	?>
 <table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d ui-shadow table-stripe ui-responsive"data-column-popup-theme="a">
@@ -309,13 +319,7 @@ function display_table($flag){
 <?php
 	//generate <tr> and <td>
 		$conn = db_connect();
-		if($flag==1){
-			$sql = "select * from sum_free;";
-		}else 
-			$sql = "select * from sum_tour;";
-		$stmt = $conn->prepare($sql);
-		$stmt->execute();
-		$results = $stmt -> get_result();
+		$results = $conn->query("select * from sum_free;");
 
 		$num_results = $results->num_rows;
 		for ($i=1; $i <= $num_results;$i++){
@@ -325,10 +329,10 @@ function display_table($flag){
 	?>
 			</tbody>
 			</table>
+			</fieldset>
 			</br>
 <?php
 	//generate game info of current user
-	if($flag==1){
 		//由id_ustc获得姓名
 		$sql = "select name from user where id_ustc=(?);";
 		$stmt = $conn->prepare($sql);
@@ -350,29 +354,91 @@ function display_table($flag){
 		$results = $conn->query('select count(sum)+1 as rank from sum_free where sum > (select sum from sum_free where name="'.$name.'");');
 		$count = $results->fetch_assoc()['rank'];
 		echo_event("我的自由赛","".$my_total_score."分，排第".$count."名");
+}
+function display_tour_table(){
+	//flag=1，自由赛 flag=2，巡回赛
+	//generate game info of current user
+	//由id_ustc获得姓名
+	$conn = db_connect();
+	$sql = "select name from user where id_ustc=(?);";
+	$stmt = $conn->prepare($sql);
+	$id_ustc = $_SESSION['valid_id_ustc'];
+	$stmt->bind_param("s",$id_ustc);
+	$stmt->execute();
+	$results = $stmt->get_result();
+	$name = $results->fetch_assoc()['name'];
+
+	//获得总积分
+	$sql = "select sum from out_sum_tour where name=(?)";
+	$stmt = $conn->prepare($sql);
+	$stmt->bind_param("s",$name);
+	$stmt->execute();
+	$results = $stmt->get_result();
+	$my_total_score =  $results->fetch_assoc()['sum'];
+
+	//获得总排名
+	$results = $conn->query('select count(sum)+1 as rank from out_sum_tour where sum > (select sum from out_sum_tour where name="'.$name.'");');
+	$count = $results->fetch_assoc()['rank'];
+	echo_event("我的巡回赛","".$my_total_score."分，排第".$count."名");
+	?>
+			<div data-role="collapsible" data-mini="true">
+		    <h4>男子积分榜</h4>
+<table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">
+			 <thead>
+			 <tr class="ui-bar-d">
+				 <th>名次</th>
+				 <th>姓名</th>
+				 <th>积分</th>
+			 </tr>
+			 </thead>
+			 <tbody>
+<?php
+	//generate <tr> and <td>	
+	$sql = "select id_ustc,user.name,sum from old_sum_tour 
+join user where old_sum_tour.name=user.name and grade_tennis='0' order by sum desc;";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute();
+	$results = $stmt -> get_result();
+	$num_results = $results->num_rows;
+	for ($i=1; $i <= $num_results;$i++){
+		$row = $results->fetch_assoc();
+		echo '<tr><td>'.$i.'</td><td><a href=profile.php?id_ustc='.$row['id_ustc'].'>'
+			.$row['name'].'</a></td><td>'.$row['sum'].'</td></tr>';
 	}
-	else {
-		//由id_ustc获得姓名
-		$sql = "select name from user where id_ustc=(?);";
-		$stmt = $conn->prepare($sql);
-		$id_ustc = $_SESSION['valid_id_ustc'];
-		$stmt->bind_param("s",$id_ustc);
-		$stmt->execute();
-		$results = $stmt->get_result();
-		$name = $results->fetch_assoc()['name'];
+	?>
+			</tbody>
+			</table>
+			</div><!--clooapsible-->
+			<div data-role="collapsible" data-mini="true">
+		    <h4>女子积分榜</h4>
+			<table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d  table-stripe ui-responsive">
+						 <thead>
+						 <tr class="ui-bar-d">
+							 <th>姓名</th>
+							 <th>积分</th>
+						 </tr>
+						 </thead>
+						 <tbody>
+			<?php
+				//generate <tr> and <td>	
+				$sql = "select id_ustc,user.name,sum from old_sum_tour 
+			join user where old_sum_tour.name=user.name and grade_tennis='1' order by sum desc;";
+				$stmt = $conn->prepare($sql);
+				$stmt->execute();
+				$results = $stmt -> get_result();
+				$num_results = $results->num_rows;
+				for ($i=1; $i <= $num_results;$i++){
+					$row = $results->fetch_assoc();
+					echo '<tr><td><a href=profile.php?id_ustc='.$row['id_ustc'].'>'
+						.$row['name'].'</a></td><td>'.$row['sum'].'</td></tr>';
+				}
+				?>
+						</tbody>
+						</table>
+					</div><!--collapsible-->
+
+<?php
 	
-		//获得总积分
-		$sql = "select sum from sum_tour where name=(?)";
-		$stmt = $conn->prepare($sql);
-		$stmt->bind_param("s",$name);
-		$stmt->execute();
-		$results = $stmt->get_result();
-		$my_total_score =  $results->fetch_assoc()['sum'];
-	
-		//获得总排名
-		$results = $conn->query('select count(sum)+1 as rank from sum_tour where sum > (select sum from sum_tour where name="'.$name.'");');
-		$count = $results->fetch_assoc()['rank'];
-		echo_event("我的巡回赛","".$my_total_score."分，排第".$count."名");
-	}
+
 }
 ?>

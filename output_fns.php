@@ -176,6 +176,7 @@ function set_html_header(){
 .ui-table-columntoggle-btn {
     display: none !important;
 }
+
 /*
 .ui-page{
     background: url(pic/startup-320x460.jpg)!important;

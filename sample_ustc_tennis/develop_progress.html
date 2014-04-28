@@ -15,6 +15,14 @@
 </div><!--header-->
 <div role="main" class="ui-content">
 	
+	<div class="ui-body ui-body-a ui-corner-all">
+	<h3>4.28</h3>
+	<p>导入了所有会员信息及巡回赛信息</p>
+	<p>建立过往巡回赛数据库</p>
+	<p>解决freeshell.ustc.edu.cn主机的登录空白页问题：虚拟机未安装mysqlnd，导致无法调用mysqli类函数</p>
+	</div>
+	<br/>
+	
 	
 	<div class="ui-body ui-body-a ui-corner-all">
 	<h3>4.27</h3>
@@ -23,7 +31,7 @@
 	<p>完成profile页面的显示个人战绩功能（单打）</p>
 	<p>登录流程改进，改用姓名+密码登录</p>
 	<p>修复了8421判断练球项目的bug（只选反手时不显示反手）</p>
-	<p>合并、简化了验证页面，减少了6个冗余php文件</p>
+	<p>合并、简化了验证页面，消去多个冗余php文件</p>
 	<p>通过data-ajax="false"和rel="external"属性，解决了同一个html页面中的切换问题</p>
 	<p>game数据库更新为game_free和game_tour，相应sql重写完成</p>
 	</div>
@@ -108,7 +116,7 @@
 
 	<div class="ui-body ui-body-a ui-corner-all">
 	<h3>3.26</h3>
-	<p>解决member.php的错误提示bug: set_html_header函数在每个生成的html中只能调用一次，否则无法正常显示
+	<p>解决member.php的错误提示bug：set_html_header函数在每个生成的html中只能调用一次，否则无法正常显示
 	<p>个人信息页面profile.html制作完成</p>
 	<p>用于上传战果和约球的invitation按钮和upload_free按钮对应的2个表单制作完成，采用popup形式</p>
 	<p>rank.html因navbar组件的刷新问题，拆分为rank_tour.html和rank_free.html，均已完成</p>
