@@ -117,8 +117,6 @@ order by time desc;');
 
 set_html_header();
 
-
-
 $profile = new profile();
 set_page_header('banner',"会员: ".$profile->name);
 check_valid_id();

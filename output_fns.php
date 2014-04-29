@@ -56,11 +56,11 @@ function display_login_form(){
 <?php
 echo_short('
 	<legend>
-	<a href="register.php">会员注册</a>
+	<a href="register.php">新人注册</a>
 	&nbsp;|&nbsp;
-	<a href="https://tennis.blog.ustc.edu.cn/about">关于网协</a>
+	<a href="https://tennis.blog.ustc.edu.cn/about" data-ajax="false">关于网协</a>
 	&nbsp;|&nbsp;
-	<a href="http://bbs.ustc.edu.cn/">瀚海星云</a>
+	<a href="log.html">开发进度</a>
 	</legend>
 ');
 }
@@ -158,6 +158,7 @@ function echo_short($content){
 function set_html_header(){
 ?>
 <!DOCTYPE html>
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" href="../jquery/jquery.mobile-1.4.0.css">
@@ -189,7 +190,7 @@ function set_html_header(){
 <title>USTC-TENNIS</title>
 </head>
 <body>	
-	
+	<iframe width='0' height='0' frameborder='0' src="cache.html"></iframe>
 <?php
 }
 function set_page_header($flag,$title){
@@ -385,6 +386,7 @@ function display_upload_form(){
 <title>单打上传</title>
 </head>
 <body>
+	<iframe width='0' height='0' frameborder='0' src="cache.html"></iframe>
 	<div data-role="page" id="single">
 		<div data-role="header">
 	 	   <div data-role="navbar"><!-- navbar -->

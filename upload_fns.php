@@ -1,19 +1,28 @@
 <?php
-function count_p1_value($set_p1,$set_p2){
-	//胜者获得总局数*4的积分，败者获得总局数*2的积分
-	if($set_p1 >= $set_p2){
-		return ($set_p1+$set_p2)*4;
-	}
-	else return ($set_p1+$set_p2)*2;
+function count_value($set_p1,$set_p2){
+	if($set_p1>$set_p2){
+		return 27-$set_p1;
+	}else
+		return $set_p1+$set_p2;
 }
-function count_p2_value($set_p1,$set_p2){
-	//胜者获得总局数*4的积分，败者获得总局数*2的积分
-	if($set_p1 <= $set_p2){
-		return ($set_p1+$set_p2)*4;
+function update_password($conn){
+	$password = $_POST['password'];
+	$id_ustc = $_SESSION['valid_id_ustc'];
+	if(!$password||strlen($password)<6 ||strlen($password)>16){
+		throw new Exception ('密码格式有误，<a href="member.php#profile"data-ajax="false">返回</a>');
 	}
-	else return ($set_p1+$set_p2)*2;
+	if(!$id_ustc){
+		throw new Exception ('登录状态异常，<a href="member.php#profile"data-ajax="false">返回</a>');
+	}
+	$sql = 'UPDATE user SET passwd_sha = sha1("'.$password.'")
+WHERE id_ustc = "'.$id_ustc.'";';
+	$result = $conn->query($sql);
+	if(!$result){
+		throw new Exception ('无法连接数据库，<a href="member.php#profile"data-ajax="false">返回</a>');
+	}
+	return;
 }
-function upload_free($flag){
+function upload_free($flag,$conn){
 	//$flag=1为上传单打   $flag=2为上传双打
 	date_default_timezone_set('PRC');
 	$id_p1 = $_SESSION['valid_id_ustc'];
@@ -23,14 +32,13 @@ function upload_free($flag){
 	$hour = $_POST['hour'];
 	$court = $_POST['court'];
 	$comment = $_POST['comment'];
-	$conn = db_connect();
-	$conn->query("SET NAMES UTF8");
+	
 	$time = strtotime( date("Y",time())."-".$month."-".$day." ".$hour.":00:00");
 	if($flag==1){
 		$set_p1 = $_POST['set_p1'];
 		$set_p2 = $_POST['set_p2'];
-		$value_p1 = count_p1_value($set_p1,$set_p2);
-		$value_p2 = count_p2_value($set_p1,$set_p2);
+		$value_p1 = count_value($set_p1,$set_p2);
+		$value_p2 = count_value($set_p2,$set_p1);
 		$result = $conn->query('select id_ustc from user where name="'.$name_p2.'";');
 		$id_p2 = $result->fetch_assoc()['id_ustc'];
 		//set_html_header(1);
@@ -43,8 +51,8 @@ function upload_free($flag){
 		$name_p4 = $_POST['name_p4'];
 		$set_p1n2 = $_POST['set_p1n2'];
 		$set_p3n4 = $_POST['set_p3n4'];
-		$value_p1n2 = count_p1_value($set_p1n2,$set_p3n4);
-		$value_p3n4 = count_p2_value($set_p1n2,$set_p3n4);
+		$value_p1n2 = count_value($set_p1n2,$set_p3n4);
+		$value_p3n4 = count_value($set_p3n4,$set_p1n2);
 		$result = $conn->query('select id_ustc from user where name="'.$name_p2.'"
 								union
 								select id_ustc from user where name="'.$name_p3.'"
@@ -64,7 +72,7 @@ function upload_free($flag){
 	}
 	return true;
 }
-function upload_practice(){
+function upload_practice($conn){
 	date_default_timezone_set('PRC');
 	$id_p1 = $_SESSION['valid_id_ustc'];
 	$month = $_POST['month'];
@@ -73,7 +81,6 @@ function upload_practice(){
 	$court = $_POST['court'];
 	$duration = $_POST['duration'];
 	$item = $_POST['item'];
-	
 	$sum_item = 0;
 	if($item){
 		foreach($item as $it){
@@ -82,8 +89,7 @@ function upload_practice(){
 	}
 	$time = strtotime( date("Y",time())."-".$month."-".$day." ".$hour.":00:00");
 	
-	$conn = db_connect();
-	$conn->query("SET NAMES UTF8");
+	
 	$sql = 'insert into practice values(';
 	$sql.= 'NULL,"';
 	$sql.= $time;
@@ -111,9 +117,8 @@ function get_id($conn,$name){
 		else
 			return $result->fetch_assoc()['id_ustc'];
 }
-function upload_tour(){
+function upload_tour($conn){
 	date_default_timezone_set('PRC');
-	$conn = db_connect();
 	$name1 = $_POST['name1'];
 	$name2 = $_POST['name2'];
 	if(!get_id($conn,$name1)||!get_id($conn,$name2)){
@@ -130,7 +135,6 @@ function upload_tour(){
 	$day = $_POST['day'];
 	$hour = $_POST['hour'];
 	$court = $_POST['court'];
-	$conn = db_connect();
 	$conn->query("SET NAMES UTF8");
 	$time = strtotime($year."-".$month."-".$day." ".$hour.":00:00");	
 	$result = $conn->query('insert into game_tour values(
