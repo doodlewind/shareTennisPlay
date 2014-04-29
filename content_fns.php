@@ -87,6 +87,7 @@ class event
 		$now_day = date('d');
 		$day = date('d',$time);
 		$time = date('h点',$time);
+		$time = ltrim($time,"0");
 		if($now_day==$day){
 			return "今天".$time;
 		}
