@@ -5,7 +5,7 @@
 	try{
 		//表格完整性
 		if(!filled_out($_POST)) {
-			throw new Exception('没填完整呢，<a href="member.php"data-ajax="false">返回</a>');
+			throw new Exception('没填完整呢，<a href="upload.php"data-ajax="false">返回</a>');
 		}
 		if($_POST['name_p2']&&!$_POST['name_p3']){
 			//throw new Exception ($_POST['set_p2']."1");
@@ -13,7 +13,7 @@
 		}
 		else if($_POST['name_p3']){
 			//throw new Exception ($_POST['set_p2']."2");
-			upload_free(2,$conn);		
+			upload_free(2,$conn);	
 		}
 		else if($_POST['duration']){
 			//throw new Exception ($_POST['set_p2']."3");

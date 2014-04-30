@@ -65,21 +65,33 @@ class profile{
 			$str.="</table>";
 			echo_event("巡回赛战绩",$str);
 		}
-	public function display_game_free(){
-		$event = $this->conn->query('select * from result_free where name_p1="'.$this->name.'" or name_p2="'.$this->name.'"
-order by time desc;');
-		$str = '<table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
-		$num = $event->num_rows;
-		if($num == 0){
-			echo_event("自由赛战绩",'暂无');
-			return;
+		public function display_game_free(){
+			//显示单打部分
+			$event = $this->conn->query('select * from result_free where name_p1="'.$this->name.'" or name_p2="'.$this->name.'"
+	order by time desc;');
+			$str = '';
+			$str.= '<table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
+			$num1 = $event->num_rows;
+			for($i=0;$i<$num1;$i++){
+				$str.=$this->get_single_row($event);
+			}
+			$str.='</table><table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
+		
+			//显示双打部分
+			$sql = 'select * from game_double where name_p1="'.$this->name.'" or name_p2="'.$this->name.'" or name_p3="'.$this->name.'"or name_p4="'.$this->name.'"order by time desc;';
+			//echo_short($sql);
+			$event = $this->conn->query($sql);
+			$num2 = $event->num_rows;
+			if($num1==0&&$num2==0){
+				echo_event("自由赛战绩",'暂无');
+				return;
+			}
+			for($i=0;$i<$num2;$i++){
+				$str.=$this->get_double_row($event);
+			}
+			$str.="</table>";
+			echo_event("自由赛战绩",$str);
 		}
-		for($i=0;$i<$num;$i++){
-			$str.=$this->display_row($event);
-		}
-		$str.="</table>";
-		echo_event("自由赛战绩",$str);
-	}
 	public function display_practice_time(){
 		$durations = $this->conn->query('select duration from practice where id_p1="'.$this->id_ustc.'";');
 		$num = $durations->num_rows;
@@ -112,6 +124,44 @@ order by time desc;');
 			$value = $value_p1;
 		}else $value = $value_p2;
 		return "<tr><td>".$time."</td><td>".$name_p1."</td><td><b>".$set_p1."-".$set_p2."</b></td><td>".$name_p2."</td><td><b>".$value."分</b></td></tr>";
+	}
+	public function get_single_row($event){
+		$row = $event->fetch_assoc();
+		date_default_timezone_set('PRC');
+		$time = date('m-d',$row['time']);
+		$id_game_double = $row['id_game_double'];
+		$name_p1 = $row['name_p1'];
+		$name_p2 = $row['name_p2'];
+		$set_p1 = $row['set_p1'];
+		$set_p2 = $row['set_p2'];
+		$value_p1 = $row['value_p1'];
+		$value_p2 = $row['value_p2'];
+		if($name_p1==$this->name){
+			$value = $value_p1;
+		}else $value = $value_p2;
+		$str =  "<tr><td>".$time."</td><td>".$name_p1."</td><td><b>".$set_p1."-".$set_p2."</b></td><td>".$name_p2."</td><td><b>".$value."分</b></td>";
+		$str.= '<td><a href="modify_verify.php?tp=fr_del&amp;id_game='.$id_game_double.'"data-ajax="false">删除</a></td></tr>';
+		return $str;
+	}
+	public function get_double_row($event){
+		$row = $event->fetch_assoc();
+		date_default_timezone_set('PRC');
+		$time = date('m-d',$row['time']);
+		$id_game_double = $row['id_game_double'];
+		$name_p1 = $row['name_p1'];
+		$name_p2 = $row['name_p2'];
+		$name_p3 = $row['name_p3'];
+		$name_p4 = $row['name_p4'];
+		$set_p1n2 = $row['set_p1n2'];
+		$set_p3n4 = $row['set_p3n4'];
+		$value_p1n2 = $row['value_p1n2'];
+		$value_p3n4 = $row['value_p3n4'];
+		if($name_p1==$this->name||$name_p2==$this->name){
+			$value = $value_p1n2;
+		}else $value = $value_p3n4;
+		$str =  "<tr><td>".$time."</td><td>".$name_p1."<br/>".$name_p2."</td><td><b>".$set_p1n2."-".$set_p3n4."</b></td><td>".$name_p3."<br/>".$name_p4."</td><td><b>".$value."分</b></td>";
+		$str.= '<td><a href="modify_verify.php?tp=fd_del&amp;id_game_double='.$id_game_double.'"data-ajax="false">删除</a></td></tr>';
+		return $str;
 	}
 }
 

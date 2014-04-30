@@ -24,20 +24,18 @@ WHERE id_ustc = "'.$id_ustc.'";';
 }
 function upload_free($flag,$conn){
 	//$flag=1为上传单打   $flag=2为上传双打
-	date_default_timezone_set('PRC');
-	$id_p1 = $_SESSION['valid_id_ustc'];
-	$name_p2 = $_POST['name_p2'];
-	$month = $_POST['month'];
-	$day = $_POST['day'];
-	$hour = $_POST['hour'];
-	$court = $_POST['court'];
-	$comment = $_POST['comment'];
-	
-	
-	$time = strtotime( date("Y",time())."-".$month."-".$day." ".$hour.":00:00");
+	date_default_timezone_set('PRC');	
 	if($flag==1){
+		$id_p1 = $_SESSION['valid_id_ustc'];
+		$name_p2 = $_POST['name_p2'];
+		$month = $_POST['month'];
+		$day = $_POST['day'];
+		$hour = $_POST['hour'];
+		$court = $_POST['court'];
+		$comment = $_POST['comment'];
 		$set_p1 = $_POST['set_p1'];
 		$set_p2 = $_POST['set_p2'];
+		$time = strtotime( date("Y",time())."-".$month."-".$day." ".$hour.":00:00");
 		$value_p1 = count_value($set_p1,$set_p2);
 		$value_p2 = count_value($set_p2,$set_p1);
 		$result = $conn->query('select id_ustc from user where name="'.$name_p2.'";');
@@ -49,34 +47,37 @@ function upload_free($flag,$conn){
 			NULL,"'.$time.'","'.$id_p1.'","'.$id_p2.'","'.$set_p1.'","'.$set_p2.'","'.$value_p1.'","'.$value_p2.'","'.$court.'","'.$comment.'");';
 		//throw new Exception ($sql);
 		$result = $conn->query($sql);
-	}else{
+	}else if($flag==2){
+		$id_p1 = $_SESSION['valid_id_ustc'];
+		$name_p2 = $_POST['name_p2'];
+		$month = $_POST['month'];
+		$day = $_POST['day'];
+		$hour = $_POST['hour'];
+		$court = $_POST['court'];
+		$comment = $_POST['comment'];
 		$name_p3 = $_POST['name_p3'];
 		$name_p4 = $_POST['name_p4'];
 		$set_p1n2 = $_POST['set_p1n2'];
 		$set_p3n4 = $_POST['set_p3n4'];
+		$time = strtotime( date("Y",time())."-".$month."-".$day." ".$hour.":00:00");
 		$value_p1n2 = count_value($set_p1n2,$set_p3n4);
 		$value_p3n4 = count_value($set_p3n4,$set_p1n2);
 		$result = $conn->query('select name from user where id_ustc="'.$_SESSION['valid_id_ustc'].'";');
 		$name_p1 = $result->fetch_assoc()['name'];
-		$result = $conn->query('select id_ustc from user where name="'.$name_p2.'"
-								union
-								select id_ustc from user where name="'.$name_p3.'"
-								union
-								select id_ustc from user where name="'.$name_p4.'";');
 		
-		$id_p2 = $result->fetch_assoc()['id_ustc'];
-		$id_p3 = $result->fetch_assoc()['id_ustc'];
-		$id_p4 = $result->fetch_assoc()['id_ustc'];
-		$result = $conn->query('insert into game_double values(
-			NULL,"'.$time.'","'.$id_p1.'","'.$id_p2.'","'.$id_p3.'","'.$id_p4.'","'.$set_p1n2.'","'.$set_p3n4.'","'.$value_p1n2.'","'.$value_p3n4.'","'.$court.'","'.$comment.'","'.$name_p1.'","'.$name_p2.'","'.$name_p3.'","'.$name_p4.'");');
-	}
-	
-	if (!$result) {
-		//throw new Exception ($id_p4.'insert into game_double values(
-		//			NULL,"'.$time.'","'.$id_p1.'","'.$id_p2.'","'.$id_p3.'","'.$id_p4.'","'.$set_p1n2.'","'.$set_p3n4.'","'.$value_free.'","'.$court.'","'.$comment.'");'.'请勿重复刷新本页，<a href="member.php">返回</a>');
-		throw new Exception ('请勿重复刷新本页，<a href="upload.php#single"data-ajax="false">返回</a>');
-	}
-	return true;
+		//依次根据输入的姓名（name_p2 - name_p4）查找协会会员id
+		$result = $conn->query('select id_ustc from user where name="'.$name_p2.'";');
+			$id_p2 = $result->fetch_assoc()['id_ustc'];
+		$result = $conn->query('select id_ustc from user where name="'.$name_p3.'";');
+			$id_p3 = $result->fetch_assoc()['id_ustc'];
+		$result = $conn->query('select id_ustc from user where name="'.$name_p3.'";');
+			$id_p4 = $result->fetch_assoc()['id_ustc'];
+		
+		$sql = 'insert into game_double values(
+			NULL,"'.$time.'","'.$id_p1.'","'.$id_p2.'","'.$id_p3.'","'.$id_p4.'","'.$set_p1n2.'","'.$set_p3n4.'","'.$value_p1n2.'","'.$value_p3n4.'","'.$court.'","'.$comment.'","'.$name_p1.'","'.$name_p2.'","'.$name_p3.'","'.$name_p4.'");';
+		throw new Exception ($sql);
+		$result = $conn->query($sql);
+	}else throw new Exception ('请勿重复刷新本页，<a href="upload.php#single"data-ajax="false">返回</a>');
 }
 function upload_practice($conn){
 	date_default_timezone_set('PRC');

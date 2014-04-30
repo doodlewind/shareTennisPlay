@@ -75,12 +75,17 @@ class event
 		//echo_event($this->getTitle(),$this->getContent());
 	}
 	public function setProfileLink($id,$name){
-		$this->href = '<a href="profile.php?id_ustc=';
-		$this->href.= $id;
-		$this->href.= '"data-ajax="false">';
-		$this->href.= $name;
-		$this->href.= '</a>';
-		return $this->href;
+		if($id){
+			$this->href = '<a href="profile.php?id_ustc=';
+			$this->href.= $id;
+			$this->href.= '"data-ajax="false">';
+			$this->href.= $name;
+			$this->href.= '</a>';
+			return $this->href;
+		}
+		else{
+			return $name;
+		}
 	}
 	public function countTime(){
 		$time = $this->row['time'];
@@ -152,10 +157,10 @@ class singleEvent extends event
 class doubleEvent extends event
 {
 	function getTitle(){
-		$this->name1 = $this->getName('id_p1');
-		$this->name2 = $this->getName('id_p2');
-		$this->name3 = $this->getName('id_p3');
-		$this->name4 = $this->getName('id_p4');
+		$this->name1 = $this->row['name_p1'];
+		$this->name2 = $this->row['name_p2'];
+		$this->name3 = $this->row['name_p3'];
+		$this->name4 = $this->row['name_p4'];
 		$id_p1 = $this->row['id_p1'];
 		$id_p2 = $this->row['id_p2'];
 		$id_p3 = $this->row['id_p3'];
