@@ -7,22 +7,23 @@
 		if(!filled_out($_POST)) {
 			throw new Exception('没填完整呢，<a href="upload.php"data-ajax="false">返回</a>');
 		}
-		if($_POST['name_p2']&&!$_POST['name_p3']){
-			//throw new Exception ($_POST['set_p2']."1");
+		if(isset($_POST['name_p2'])&&!isset($_POST['name_p3'])){
+			//throw new Exception ("uploadsingle");
 			upload_free(1,$conn);		
 		}
-		else if($_POST['name_p3']){
-			//throw new Exception ($_POST['set_p2']."2");
+		if(isset($_POST['name_p3'])){
+			//throw new Exception ("uploaddouble");
 			upload_free(2,$conn);	
 		}
-		else if($_POST['duration']){
-			//throw new Exception ($_POST['set_p2']."3");
+		if(isset($_POST['duration'])){
+			//throw new Exception ("practice");
 			upload_practice($conn);
 		}
-		else if($_POST['password']){
-			//throw new Exception ($_POST['set_p2']."4");
+		if(isset($_POST['password'])){
+			//throw new Exception ("chgpasswd");
 			update_password($conn);	
 		}
+		//throw new Exception ("failed");
 		//布置成员页面
 		set_html_header();
 		set_page_header('banner','上传成功！');

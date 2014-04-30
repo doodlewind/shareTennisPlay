@@ -355,21 +355,21 @@ function set_page_footer($flag){
 ?>	
                 <li><a href="#" data-icon="bars" class="ui-btn-active">动态</a></li>
                 <li><a href="#rank_free" data-icon="star">积分</a></li>
-                <li><a href="#profile" data-icon="user">会员</a></li>
+                <li><a href="#profile" data-icon="user">我的</a></li>
 <?php
 	}
 	else if($flag==2){
 ?>
                 <li><a href="#member" data-icon="bars">动态</a></li>
                 <li><a href="#" data-icon="star"class="ui-btn-active">积分</a></li>
-                <li><a href="#profile" data-icon="user">会员</a></li>
+                <li><a href="#profile" data-icon="user">我的</a></li>
 <?php
 	}
 	else if($flag==3){
 ?>
                 <li><a href="#member" data-icon="bars">动态</a></li>
                 <li><a href="#rank_free" data-icon="star">积分</a></li>
-                <li><a href="#"class="ui-btn-active" data-icon="user">会员</a></li>
+                <li><a href="#"class="ui-btn-active" data-icon="user">我的</a></li>
 <?php
 	}
 ?>
