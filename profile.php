@@ -160,7 +160,6 @@ class profile{
 			$value = $value_p1n2;
 		}else $value = $value_p3n4;
 		$str =  "<tr><td>".$time."</td><td>".$name_p1."<br/>".$name_p2."</td><td><b>".$set_p1n2."-".$set_p3n4."</b></td><td>".$name_p3."<br/>".$name_p4."</td><td><b>".$value."分</b></td>";
-		$str.= '<td><a href="modify_verify.php?tp=fd_del&amp;id_game_double='.$id_game_double.'"data-ajax="false">删除</a></td></tr>';
 		return $str;
 	}
 }
