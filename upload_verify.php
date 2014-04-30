@@ -5,18 +5,23 @@
 	try{
 		//表格完整性
 		if(!filled_out($_POST)) {
-			throw new Exception($_POST['name_p3'].'没填完整呢，<a href="member.php"data-ajax="false">返回</a>');
+			throw new Exception('没填完整呢，<a href="member.php"data-ajax="false">返回</a>');
 		}
-		if($_POST['name_p1']&&!$_POST['name_p3']){
-			upload_free(1,$conn);
-		}else if($_POST['name_p3']){
-			upload_free(2,$conn);
+		if($_POST['name_p2']&&!$_POST['name_p3']){
+			//throw new Exception ($_POST['set_p2']."1");
+			upload_free(1,$conn);		
+		}
+		else if($_POST['name_p3']){
+			//throw new Exception ($_POST['set_p2']."2");
+			upload_free(2,$conn);		
 		}
 		else if($_POST['duration']){
+			//throw new Exception ($_POST['set_p2']."3");
 			upload_practice($conn);
 		}
 		else if($_POST['password']){
-			update_password($conn);
+			//throw new Exception ($_POST['set_p2']."4");
+			update_password($conn);	
 		}
 		//布置成员页面
 		set_html_header();

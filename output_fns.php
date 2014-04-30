@@ -70,7 +70,7 @@ function display_date_button($flag){
 	$year = date("Y",time());
 	$month = date("m",time());
 	$date = date("d",time());
-	$hour = date("h",time());
+	$hour = date("H",time());
 	switch($flag) {
 		case 1:
 			for($i=1;$i<=12;$i++){
@@ -123,20 +123,31 @@ function display_date_button($flag){
 <?php
 }
 function echo_event($title,$content){
-	//输出一条由标题和内容组成的消息
+	//输出一条由标题和内容组成的消息	
 ?>
 	 <fieldset data-role="controlgroup" data-mini="true">
-	 <div class="ui-corner-all custom-corners">
-	   <div class="ui-bar ui-bar-a">
-	     <h3><?php echo $title;?></h3>
-	   </div>
-	   <div data-mini="true" class="ui-body ui-body-a">
-	     <p><?php echo $content;?></p>
-	   </div>
-	 </div>
-	 </fieldset>
+	 	 <div class="ui-corner-all custom-corners">
+	 	   <div class="ui-bar ui-bar-a">
+	 	     <h3><?php echo $title;?></h3>
+	 	   </div>
+	 	   <div data-mini="true" class="ui-body ui-body-a">
+	 	     <p><?php echo $content;?></p>
+	 	   </div>
+	 	 </div>
+	 	 </fieldset>
 <?php
 }
+/*
+function echo_new_event($title,$content){
+	
+?>
+	<div data-role="collapsible" data-mini="true">
+	    <h4><?php echo $title;?></h4>
+		 <legend><?php echo $content;?></legend>
+	</div>
+<?php
+}
+*/
 function echo_button_id($flag,$flag2){
 	//flag与set_html_header相同，flag2有a和div两种
 	if($flag2=='a')
@@ -383,7 +394,7 @@ function display_upload_form(){
     display: none !important;
 }
 </style>
-<title>单打上传</title>
+<title>比赛上传</title>
 </head>
 <body>
 	<iframe width='0' height='0' frameborder='0' src="cache.html"></iframe>
@@ -395,83 +406,67 @@ function display_upload_form(){
 	 	               <li><a href="#double">上传双打</a></li>
 	 	           </ul>
 	 	       </div><!-- navbar -->
-	  </div>
+		  </div>
 
 		<div data-role="main">
 			<div style="padding:10px 20px;">
 		    <form action="upload_verify.php"method="post">
 					        <input data-mini="true" type="text" name="name_p2" value="" placeholder="对手名，必填哦">
+							<!--比分控件begin-->
+							<div class="ui-field-contain">
+								<div class="ui-grid-a">
+									<div class="ui-block-a">
+								        <label for="slide1">我方</label>
+								        <input type="range" name="set_p1" id="slide1" data-highlight="true"data-mini="true" min="0" max="7" value="0">
+									</div>
+									<div class="ui-block-b">
+										<label for="slide2">对方</label>
+								        <input type="range" name="set_p2" id="slide2" data-highlight="true"data-mini="true" min="0" max="7" value="0">
+									</div>
+								</div>
+							</div>
+							<!--比分控件end-->
+							
+							<!--日期控件begin-->
 							<fieldset data-role="controlgroup" data-mini="true"data-type="horizontal">
-								<legend>时间</legend>
 							    <select name="month" id="month">
-<?php
-	display_date_button(1);
-?>
+			<?php
+			display_date_button(1);
+			?>
 							    </select>
 							    <select name="day" id="day">
-<?php
-	display_date_button(2);
-?>
+			<?php
+			display_date_button(2);
+			?>
 							    </select>
 							    <select name="hour" id="hour">
-<?php
-	display_date_button(3);
-?>
-							    </select>	
-							</fieldset>				    
-						<div class="ui-grid-a">
-							<div class="ui-block-a">
-								<fieldset data-role="controlgroup" data-type="horizontal"data-mini="true">
-									<legend>比分</legend>
-								    <select name="set_p1" id="set_p1">
-										<option>我</option>
-										<option value="0">0</option>
-								        <option value="1">1</option>
-								        <option value="2">2</option>
-										<option value="3">3</option>
-										<option value="4">4</option>
-										<option value="5">5</option>
-										<option value="6">6</option>
-										<option value="7">7</option>
-								    </select>
-								    <select name="set_p2" id="set_p2">
-										<option>对手</option>
-										<option value="0">0</option>
-								        <option value="1">1</option>
-								        <option value="2">2</option>
-										<option value="3">3</option>
-										<option value="4">4</option>
-										<option value="5">5</option>
-										<option value="6">6</option>
-										<option value="7">7</option>
-								    </select>
-								</fieldset>
-								
-							</div>
-							<div class="ui-block-b">
-								<fieldset data-role="controlgroup" data-type="horizontal"data-mini="true">
-								        <legend>地点</legend>
-								        <input type="radio" name="court" id="radio-choice-v-6a" value="1">
-								        <label for="radio-choice-v-6a">东场</label>
-								        <input type="radio" name="court" id="radio-choice-v-6b" value="2">
-								        <label for="radio-choice-v-6b">西场</label>
-								</fieldset>
-								
-							</div>
-						</div>
-						<fieldset data-role="controlgroup">
-						<input data-mini="true"type="text" name="comment" id="textinput-2" placeholder="说句感想吧，必填哦" value="">
-						</fieldset>
+			<?php
+			display_date_button(3);
+			?>
+							    </select>
+							    <select name="court"data-native-menu="false"id="court_single">
+									<option value="1">东厂</option>
+									<option value="2">西厂</option>
+							    </select>
+	
+							</fieldset>						    
+							<!--日期控件end-->
+							
+					<!--返回控件begin-->
+					<fieldset data-role="controlgroup"data-mini="true">
+						<input type="text" name="comment" id="textinput-2" placeholder="说句感想吧，必填哦" value="">
+					</fieldset>
 					<div class="ui-grid-a">
 						<div class="ui-block-a">
-						<a href="member.php#member"rel="external"class="ui-btn ui-corner-all ui-shadow">返回</a>
+							<a href="member.php#member"data-ajax="false"class="ui-btn ui-mini">返回</a>
 						</div>
 						<div class="ui-block-b">
-					    <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">提交！</button>
+					    	<button type="submit" class="ui-btn ui-mini ui-btn-b ui-btn-icon-left ui-icon-check">提交！</button>
 						</div>
 					</div>
-		        </div>
+					<!--返回控件end-->
 		    </form>
+			</div>
 		</div><!--main-->
 	</div><!--page-->
 	<div data-role="page" id ="double">
@@ -481,14 +476,13 @@ function display_upload_form(){
 	 	               <li><a href="#single">上传单打</a></li>
 	 	               <li><a href="#"class="ui-btn-active">上传双打</a></li>
 	 	           </ul>
-	 	       </div><!-- /navbar -->
-	  </div>
+	 	   </div><!-- /navbar -->
+		</div>
 
 		<div data-role="main">
 			<div style="padding:10px 20px;">
 		    <form action="upload_verify.php"method="post">
-					<legend>*若有非网协会员，相应位置请留空</legend>
-					<input data-mini="true" type="text" name="name_p2"value="" placeholder="队友名">
+				<input data-mini="true" type="text" name="name_p2"value="" placeholder="队友名">
 				<div class="ui-grid-a">
 					<div class="ui-block-a">
 
@@ -499,74 +493,57 @@ function display_upload_form(){
 						<input data-mini="true" type="text" name="name_p4" value="" placeholder="对手名">
 					</div>
 				</div>
-							<fieldset data-role="controlgroup" data-mini="true"data-type="horizontal">
-								<legend>时间</legend>
-							    <select name="month" id="month">
+				
+				<!--比分控件begin-->
+					<div class="ui-grid-a">
+						<div class="ui-block-a">
+					        <label for="slide1">我方组合</label>
+					        <input type="range" name="set_p1n2" id="slide1" data-highlight="true"data-mini="true" min="0" max="7" value="0">
+						</div>
+						<div class="ui-block-b">
+							<label for="slide2">对方组合</label>
+					        <input type="range" name="set_p3n4" id="slide2" data-highlight="true"data-mini="true" min="0" max="7" value="0">
+						</div>
+					</div>
+				<!--比分控件end-->
+				
+				<!--日期控件begin-->
+				<fieldset data-role="controlgroup" data-mini="true"data-type="horizontal">
+				    <select name="month" id="month_double">
 <?php
 display_date_button(1);
 ?>
-							    </select>
-							    <select name="day" id="day">
+				    </select>
+				    <select name="day" id="day_double">
 <?php
 display_date_button(2);
 ?>
-							    </select>
-							    <select name="hour" id="hour">
+				    </select>
+				    <select name="hour" id="hour_double">
 <?php
 display_date_button(3);
 ?>
-							    </select>	
-							</fieldset>						    
-						<div class="ui-grid-a">
-							<div class="ui-block-a">
-								<fieldset data-role="controlgroup" data-type="horizontal"data-mini="true">
-								    <select name="set_p1n2" id="set_p1n2">
-										<option>我</option>
-										<option value="0">0</option>
-								        <option value="1">1</option>
-								        <option value="2">2</option>
-										<option value="3">3</option>
-										<option value="4">4</option>
-										<option value="5">5</option>
-										<option value="6">6</option>
-										<option value="7">7</option>
-								    </select>
-								    <select name="set_p3n4" id="set_p3n4">
-										<option>对手</option>
-										<option value="0">0</option>
-								        <option value="1">1</option>
-								        <option value="2">2</option>
-										<option value="3">3</option>
-										<option value="4">4</option>
-										<option value="5">5</option>
-										<option value="6">6</option>
-										<option value="7">7</option>
-								    </select>
-								</fieldset>
-							</div>
-							<div class="ui-block-b">
-								<fieldset data-role="controlgroup" data-type="horizontal"data-mini="true">
-
-								        <input type="radio" name="court" id="radio-choice-v-6a" value="1">
-								        <label for="radio-choice-v-6a">东场</label>
-								        <input type="radio" name="court" id="radio-choice-v-6b" value="2">
-								        <label for="radio-choice-v-6b">西场</label>
-								</fieldset>						
-							</div>
-						</div>
-						<fieldset data-role="controlgroup">
-
+				    </select>
+				    <select name="court"data-native-menu="false"id="court_double">
+						<option value="1">东厂</option>
+						<option value="2">西厂</option>
+				    </select>	
+					
+				</fieldset>						    
+				<!--日期控件end-->
+				<!--感想与提交控件begin-->
+					<fieldset data-role="controlgroup">
 						<input data-mini="true"type="text" name="comment" id="textinput-2" placeholder="说句感想吧，必填哦" value="">
-						</fieldset>
+					</fieldset>
 					<div class="ui-grid-a">
 						<div class="ui-block-a">
-						<a href="member.php#member"rel="external" class="ui-btn ui-corner-all ui-shadow">返回</a>
+							<a href="member.php#member"data-ajax="false"class="ui-btn ui-mini">返回</a>
 						</div>
 						<div class="ui-block-b">
-					    <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">提交！</button>
+					    	<button type="submit" class="ui-btn ui-mini ui-btn-b ui-btn-icon-left ui-icon-check">提交！</button>
 						</div>
 					</div>
-		        </div>
+				<!--感想与提交控件end-->
 		    </form>
 		</div><!--main-->
 	</div><!--page-->
@@ -687,6 +664,6 @@ function display_tour_form(){
 
 		        </div>
 		    </form>
-<?
+<?php
 }
 ?>

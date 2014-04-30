@@ -84,17 +84,22 @@ class event
 	}
 	public function countTime(){
 		$time = $this->row['time'];
+		$month = ltrim(date('m',$time),"0");
 		$now_day = date('d');
 		$day = date('d',$time);
-		$time = date('h点',$time);
+		$time = date('H点',$time);
 		$time = ltrim($time,"0");
+		
 		if($now_day==$day){
 			return "今天".$time;
 		}
 		else if($now_day==$day+1){
 			return "昨天".$time;
 		}
-		else return $now_day-$day."天前";
+		else{
+			$day = ltrim($day,"0");
+			return $month."月".$day."日";
+		}
 	}
 	public function getCourt(){
 		if($this->row['court']=='1'){
@@ -256,14 +261,14 @@ class profile_member{
 		
 		echo_short($content);
 		echo '<form action="upload_verify.php"method="post">
-			<div data-role="collapsible" data-mini="true">
+			<div data-role="collapsible"data-collapsed-icon="gear" data-expanded-icon="gear" data-mini="true">
 			    <h4>更改密码</h4>
 				<div class="ui-grid-a">
 				<div class="ui-block-a"><div class="ui-body ui-body-d">
 					<input data-mini="true"type="password"name="password"placeholder="6-16位">
 				</div></div>
-				<div class="ui-block-b"><div class="ui-body ui-body-d">
-					<input data-mini="true"type="submit"value="确认"class="ui-btn ui-btn-inline"></input>
+				<div class="ui-block-b"><div class="ui-body ">
+					<input data-mini="true"type="submit"value="确认"class="ui-btn ui-mini"></input>
 				</div></div>
 				</div><!--ui-grid-->
 				</form>
@@ -301,22 +306,34 @@ class profile_member{
 			$str.= '</table><br/><table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
 			$num = $event->num_rows;
 			for($i=0;$i<$num;$i++){
-				$str.=$this->display_row($event);
+				$str.=$this->get_tour_row($event);
 			}
 			$str.="</table>";
 			echo_event("巡回赛战绩",$str);
 		}
 	public function display_game_free(){
+		//显示单打部分
 		$event = $this->conn->query('select * from result_free where name_p1="'.$this->name.'" or name_p2="'.$this->name.'"
 order by time desc;');
-		$str = '<table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
-		$num = $event->num_rows;
-		if($num == 0){
+		$str = '点击删除将立即执行，当心手滑...';
+		$str.= '<table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
+		$num1 = $event->num_rows;
+		for($i=0;$i<$num1;$i++){
+			$str.=$this->get_single_row($event);
+		}
+		$str.='</table><table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
+		
+		//显示双打部分
+		$sql = 'select * from game_double where name_p1="'.$this->name.'" or name_p2="'.$this->name.'" or name_p3="'.$this->name.'"or name_p4="'.$this->name.'"order by time desc;';
+		//echo_short($sql);
+		$event = $this->conn->query($sql);
+		$num2 = $event->num_rows;
+		if($num1==0&&$num2==0){
 			echo_event("自由赛战绩",'暂无');
 			return;
 		}
-		for($i=0;$i<$num;$i++){
-			$str.=$this->display_personal_row($event);
+		for($i=0;$i<$num2;$i++){
+			$str.=$this->get_double_row($event);
 		}
 		$str.="</table>";
 		echo_event("自由赛战绩",$str);
@@ -324,10 +341,11 @@ order by time desc;');
 	public function display_id(){
 		echo_event("id",$this->$id_ustc);
 	}
-	public function display_personal_row($event){
-		date_default_timezone_set('PRC');
+	public function get_single_row($event){
 		$row = $event->fetch_assoc();
+		date_default_timezone_set('PRC');
 		$time = date('m-d',$row['time']);
+		$id_game_double = $row['id_game_double'];
 		$name_p1 = $row['name_p1'];
 		$name_p2 = $row['name_p2'];
 		$set_p1 = $row['set_p1'];
@@ -337,11 +355,31 @@ order by time desc;');
 		if($name_p1==$this->name){
 			$value = $value_p1;
 		}else $value = $value_p2;
-		$str =  "<tr><td>".$time."</td><td>&nbsp;".$name_p1."</td><td>&nbsp;&nbsp<b>".$set_p1."-".$set_p2."</b></td><td>&nbsp;&nbsp".$name_p2."</td><td><b>&nbsp;(".$value."分)</b></td>";
-		$str.= "<td><a>删除</a></td></tr>";
+		$str =  "<tr><td>".$time."</td><td>".$name_p1."</td><td><b>".$set_p1."-".$set_p2."</b></td><td>".$name_p2."</td><td><b>".$value."分</b></td>";
+		$str.= '<td><a href="modify_verify.php?tp=fr_del&amp;id_game='.$id_game_double.'"data-ajax="false">删除</a></td></tr>';
 		return $str;
 	}
-	public function display_row($event){
+	public function get_double_row($event){
+		$row = $event->fetch_assoc();
+		date_default_timezone_set('PRC');
+		$time = date('m-d',$row['time']);
+		$id_game_double = $row['id_game_double'];
+		$name_p1 = $row['name_p1'];
+		$name_p2 = $row['name_p2'];
+		$name_p3 = $row['name_p3'];
+		$name_p4 = $row['name_p4'];
+		$set_p1n2 = $row['set_p1n2'];
+		$set_p3n4 = $row['set_p3n4'];
+		$value_p1n2 = $row['value_p1n2'];
+		$value_p3n4 = $row['value_p3n4'];
+		if($name_p1==$this->name||$name_p2==$this->name){
+			$value = $value_p1n2;
+		}else $value = $value_p3n4;
+		$str =  "<tr><td>".$time."</td><td>".$name_p1."<br/>".$name_p2."</td><td><b>".$set_p1n2."-".$set_p3n4."</b></td><td>".$name_p3."<br/>".$name_p4."</td><td><b>".$value."分</b></td>";
+		$str.= '<td><a href="modify_verify.php?tp=fd_del&amp;id_game_double='.$id_game_double.'"data-ajax="false">删除</a></td></tr>';
+		return $str;
+	}
+	public function get_tour_row($event){
 		date_default_timezone_set('PRC');
 		$row = $event->fetch_assoc();
 		$time = date('m-d',$row['time']);

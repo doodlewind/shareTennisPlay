@@ -33,6 +33,7 @@ function upload_free($flag,$conn){
 	$court = $_POST['court'];
 	$comment = $_POST['comment'];
 	
+	
 	$time = strtotime( date("Y",time())."-".$month."-".$day." ".$hour.":00:00");
 	if($flag==1){
 		$set_p1 = $_POST['set_p1'];
@@ -44,8 +45,10 @@ function upload_free($flag,$conn){
 		//set_html_header(1);
 		//echo($id_p1." ".$name_p2." ".$month." ".$day." ".$hour." ".$set_p1." ".$set_p2." ".$court." ".$comment);
 		//$time为当前年份与表单中month、day、hour一起生成的上传时间，分秒均取零
-		$result = $conn->query('insert into game_free values(
-			NULL,"'.$time.'","'.$id_p1.'","'.$id_p2.'","'.$set_p1.'","'.$set_p2.'","'.$value_p1.'","'.$value_p2.'","'.$court.'","'.$comment.'");');
+		$sql = 'insert into game_free values(
+			NULL,"'.$time.'","'.$id_p1.'","'.$id_p2.'","'.$set_p1.'","'.$set_p2.'","'.$value_p1.'","'.$value_p2.'","'.$court.'","'.$comment.'");';
+		//throw new Exception ($sql);
+		$result = $conn->query($sql);
 	}else{
 		$name_p3 = $_POST['name_p3'];
 		$name_p4 = $_POST['name_p4'];
@@ -53,16 +56,19 @@ function upload_free($flag,$conn){
 		$set_p3n4 = $_POST['set_p3n4'];
 		$value_p1n2 = count_value($set_p1n2,$set_p3n4);
 		$value_p3n4 = count_value($set_p3n4,$set_p1n2);
+		$result = $conn->query('select name from user where id_ustc="'.$_SESSION['valid_id_ustc'].'";');
+		$name_p1 = $result->fetch_assoc()['name'];
 		$result = $conn->query('select id_ustc from user where name="'.$name_p2.'"
 								union
 								select id_ustc from user where name="'.$name_p3.'"
 								union
 								select id_ustc from user where name="'.$name_p4.'";');
+		
 		$id_p2 = $result->fetch_assoc()['id_ustc'];
 		$id_p3 = $result->fetch_assoc()['id_ustc'];
 		$id_p4 = $result->fetch_assoc()['id_ustc'];
 		$result = $conn->query('insert into game_double values(
-			NULL,"'.$time.'","'.$id_p1.'","'.$id_p2.'","'.$id_p3.'","'.$id_p4.'","'.$set_p1n2.'","'.$set_p3n4.'","'.$value_p1n2.'","'.$value_p3n4.'","'.$court.'","'.$comment.'");');
+			NULL,"'.$time.'","'.$id_p1.'","'.$id_p2.'","'.$id_p3.'","'.$id_p4.'","'.$set_p1n2.'","'.$set_p3n4.'","'.$value_p1n2.'","'.$value_p3n4.'","'.$court.'","'.$comment.'","'.$name_p1.'","'.$name_p2.'","'.$name_p3.'","'.$name_p4.'");');
 	}
 	
 	if (!$result) {
