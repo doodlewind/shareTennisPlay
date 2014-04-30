@@ -140,7 +140,6 @@ class profile{
 			$value = $value_p1;
 		}else $value = $value_p2;
 		$str =  "<tr><td>".$time."</td><td>".$name_p1."</td><td><b>".$set_p1."-".$set_p2."</b></td><td>".$name_p2."</td><td><b>".$value."分</b></td>";
-		$str.= '<td><a href="modify_verify.php?tp=fr_del&amp;id_game='.$id_game_double.'"data-ajax="false">删除</a></td></tr>';
 		return $str;
 	}
 	public function get_double_row($event){
