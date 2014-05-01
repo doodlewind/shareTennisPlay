@@ -1,7 +1,8 @@
 <?php
 function count_value($set_p1,$set_p2){
+	
 	if($set_p1>$set_p2){
-		return 27-$set_p1;
+		return 27-($set_p1+$set_p2);
 	}else
 		return $set_p1+$set_p2;
 }
@@ -60,7 +61,7 @@ function upload_free($flag,$conn){
 		$set_p1n2 = $_POST['set_p1n2'];
 		$set_p3n4 = $_POST['set_p3n4'];
 		$time = strtotime( date("Y",time())."-".$month."-".$day." ".$hour.":00:00");
-		$value_p1n2 = count_value($set_p1n2,$set_p3n4);
+		$value_p1n2 = count_value($set_p1n2,$set_p3n4);	
 		$value_p3n4 = count_value($set_p3n4,$set_p1n2);
 		$result = $conn->query('select name from user where id_ustc="'.$_SESSION['valid_id_ustc'].'";');
 		$name_p1 = $result->fetch_assoc()['name'];
@@ -70,7 +71,7 @@ function upload_free($flag,$conn){
 			$id_p2 = $result->fetch_assoc()['id_ustc'];
 		$result = $conn->query('select id_ustc from user where name="'.$name_p3.'";');
 			$id_p3 = $result->fetch_assoc()['id_ustc'];
-		$result = $conn->query('select id_ustc from user where name="'.$name_p3.'";');
+		$result = $conn->query('select id_ustc from user where name="'.$name_p4.'";');
 			$id_p4 = $result->fetch_assoc()['id_ustc'];
 		
 		$sql = 'insert into game_double values(

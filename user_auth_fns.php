@@ -3,12 +3,12 @@ function register($id_ustc,$name,$mobile,$passwd) {
 	//连接数据库，若注册失败则返回错误提示
 	$conn = db_connect();
 	$result = $conn->query("select * from user where 
-		id_ustc ='".$id_ustc."'");
-	if (!$result) {
+		name ='".$name."'");
+	if (!isset($result)) {
 		throw new Exception ('异常操作，暂无法注册，<a href="register.php">返回</a>');
 	}
 	if ($result->num_rows>0) {
-		throw new Exception ('该学号已被注册！<a href="register.php">返回</a>');
+		throw new Exception ('存在同名帐号，<a href="register.php">返回</a>');
 	}
 	//验证成功，则写入数据库
 	$conn->query("SET NAMES UTF8");

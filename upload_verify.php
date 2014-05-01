@@ -1,6 +1,8 @@
 <?php
 	require_once('tennis_fns.php');
 	session_start();
+	set_html_header('banner','USTC-Tennis');
+	set_page_header();
 	$conn = db_connect();
 	try{
 		//表格完整性
@@ -25,20 +27,13 @@
 		}
 		//throw new Exception ("failed");
 		//布置成员页面
-		set_html_header();
-		set_page_header('banner','上传成功！');
 		echo_event('提示','记录已上传，<a href="member.php#member"data-ajax="false">返回</a>');
 		
-		set_page_footer(0);
-		set_html_footer();
+		
 	}
 	catch (Exception $e) {
-		set_html_header();
-		set_page_header(0,'呃，出了点问题...');
-		echo_event('错误提示',$e->getMessage());
-		
-		set_page_footer(0);
-		set_html_footer();
-		exit;
+		echo_event('提示',$e->getMessage());
 	}
+	set_page_footer(0);
+	set_html_footer();
 ?>

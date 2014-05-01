@@ -4,7 +4,7 @@ function dbug($value){
 		throw new Exception ($value);
 	}
 	catch (Exception $e){
-		echo_short($e->getMessage());
+		echo $e->getMessage();
 		exit;
 	}
 }
@@ -62,13 +62,18 @@ function display_login_form(){
 					</div>
 				</div>
 </form>
-	<legend>
-	<a href="register.php">新人注册</a>
-	&nbsp;|&nbsp;
+   <fieldset data-role="controlgroup" data-mini="true">
+   <div class="ui-bar ui-bar-a">
+   <table class="ui-table ui-responsive"><tr><td>
+	<a href="register.php">用户注册</a>
+	</td><td>
 	<a href="https://tennis.blog.ustc.edu.cn/about" data-ajax="false">关于网协</a>
-	&nbsp;|&nbsp;
-	<a href="log.html">开发进度</a>
-	</legend>
+	</td><td>
+	<a href="log.html">Dev Log</a>
+	</td></tr></table>
+   </div>
+   </fieldset>
+	
 <?php
 }
 function display_date_button($flag){
