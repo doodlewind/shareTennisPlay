@@ -35,16 +35,16 @@ function upload_free($flag,$conn){
 		$comment = $_POST['comment'];
 		$set_p1 = $_POST['set_p1'];
 		$set_p2 = $_POST['set_p2'];
-		$time = strtotime( date("Y",time())."-".$month."-".$day." ".$hour.":00:00");
+		$time = strtotime( date("Y",time())."-".$month."-".$day." ".$hour.":00:".date("s"));
 		$value_p1 = count_value($set_p1,$set_p2);
 		$value_p2 = count_value($set_p2,$set_p1);
 		$result = $conn->query('select id_ustc from user where name="'.$name_p2.'";');
 		$id_p2 = $result->fetch_assoc()['id_ustc'];
-		//set_html_header(1);
-		//echo($id_p1." ".$name_p2." ".$month." ".$day." ".$hour." ".$set_p1." ".$set_p2." ".$court." ".$comment);
-		//$time为当前年份与表单中month、day、hour一起生成的上传时间，分秒均取零
+		$result = $conn->query('select name from user where id_ustc="'.$id_p1.'";');
+		$name_p1 = $result->fetch_assoc()['name'];
+		
 		$sql = 'insert into game_free values(
-			NULL,"'.$time.'","'.$id_p1.'","'.$id_p2.'","'.$set_p1.'","'.$set_p2.'","'.$value_p1.'","'.$value_p2.'","'.$court.'","'.$comment.'");';
+			NULL,"'.$time.'","'.$id_p1.'","'.$id_p2.'","'.$set_p1.'","'.$set_p2.'","'.$value_p1.'","'.$value_p2.'","'.$court.'","'.$comment.'","'.$name_p1.'","'.$name_p2.'");';
 		//throw new Exception ($sql);
 		$result = $conn->query($sql);
 	}else if($flag==2){
@@ -75,7 +75,7 @@ function upload_free($flag,$conn){
 		
 		$sql = 'insert into game_double values(
 			NULL,"'.$time.'","'.$id_p1.'","'.$id_p2.'","'.$id_p3.'","'.$id_p4.'","'.$set_p1n2.'","'.$set_p3n4.'","'.$value_p1n2.'","'.$value_p3n4.'","'.$court.'","'.$comment.'","'.$name_p1.'","'.$name_p2.'","'.$name_p3.'","'.$name_p4.'");';
-		throw new Exception ($sql);
+		//throw new Exception ($sql);
 		$result = $conn->query($sql);
 	}else throw new Exception ('请勿重复刷新本页，<a href="upload.php#single"data-ajax="false">返回</a>');
 }
