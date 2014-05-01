@@ -9,7 +9,6 @@
 		if($_GET['tp']=="fr_del"){
 			//throw new Exception ($_GET['tp']);
 			$id_game = $_GET['id_game'];
-			
 			if(!($id_game < 500)){
 				throw new Exception($sql);
 			}

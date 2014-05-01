@@ -1,4 +1,13 @@
 <?php
+function dbug($value){
+	try{
+		throw new Exception ($value);
+	}
+	catch (Exception $e){
+		echo_short($e->getMessage());
+		exit;
+	}
+}
 function display_register_form(){
 	//注册表单
 ?>

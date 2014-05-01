@@ -318,7 +318,7 @@ class profile_member{
 		}
 	public function display_game_free(){
 		//显示单打部分
-		$event = $this->conn->query('select * from result_free where name_p1="'.$this->name.'" or name_p2="'.$this->name.'"
+		$event = $this->conn->query('select * from game_free where name_p1="'.$this->name.'" or name_p2="'.$this->name.'"
 order by time desc;');
 		$str = '点击删除将立即执行，当心手滑...';
 		$str.= '<table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
@@ -350,7 +350,8 @@ order by time desc;');
 		$row = $event->fetch_assoc();
 		date_default_timezone_set('PRC');
 		$time = date('m-d',$row['time']);
-		$id_game_double = $row['id_game_double'];
+		$id_game = $row['id_game'];
+		//dbug($id_game);
 		$name_p1 = $row['name_p1'];
 		$name_p2 = $row['name_p2'];
 		$set_p1 = $row['set_p1'];
@@ -361,7 +362,7 @@ order by time desc;');
 			$value = $value_p1;
 		}else $value = $value_p2;
 		$str =  "<tr><td>".$time."</td><td>".$name_p1."</td><td><b>".$set_p1."-".$set_p2."</b></td><td>".$name_p2."</td><td><b>".$value."分</b></td>";
-		$str.= '<td><a href="modify_verify.php?tp=fr_del&amp;id_game='.$id_game_double.'"data-ajax="false">删除</a></td></tr>';
+		$str.= '<td><a href="modify_verify.php?tp=fr_del&amp;id_game='.$id_game.'"data-ajax="false">删除</a></td></tr>';
 		return $str;
 	}
 	public function get_double_row($event){

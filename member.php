@@ -19,7 +19,7 @@ set_page_header('rank_tour',"积分排名");
 display_tour_table();
 set_page_footer(2);
 
-
+//class profile_member locates in content_fns.php
 $profile = new profile_member();
 set_page_header('profile',"个人中心");
 $profile->display_pensonal_data();
