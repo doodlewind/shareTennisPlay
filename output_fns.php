@@ -85,12 +85,11 @@ function display_date_button($flag){
 	$hour = date("H",time());
 	switch($flag) {
 		case 1:
-			for($i=1;$i<=12;$i++){
-				if ($i==$month){
-					echo '<option value="'.$i.'"selected="selected">'.$i.'月</option>';
-				}
-				else echo '<option value="'.$i.'">'.$i.'月</option>';
-			}
+			if($month==1){
+				$j = 12;
+			}else $j = $month-1;
+			echo '<option value="'.$j.'">'.$j.'月</option>';
+			echo '<option value="'.$month.'"selected="selected">'.ltrim($month,"0").'月</option>';
 			break;
 		case 2:
 			if($month==4||$month==6||$month==9||$month==11){
@@ -112,17 +111,17 @@ function display_date_button($flag){
 		case 3:
 			if($hour < 7){
 				echo '<option value="7"selected="selected">7点</option>';
-				for($i=8;$i<=18;$i++){
+				for($i=8;$i<=19;$i++){
 					echo '<option value="'.$i.'">'.$i.'点</option>';
 				}
 			}
-			else if($hour > 18){
-				for($i=7;$i<=17;$i++){
+			else if($hour > 19){
+				for($i=7;$i<=19;$i++){
 					echo '<option value="'.$i.'">'.$i.'点</option>';
 				}
 				echo '<option value="18"selected="selected">18点</option>';
 			}
-			else for($i=7;$i<=18;$i++){
+			else for($i=7;$i<=19;$i++){
 					if ($i==$hour){
 						echo '<option value="'.$i.'"selected="selected">'.$i.'点</option>';
 					}
