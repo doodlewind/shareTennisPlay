@@ -62,8 +62,6 @@ function display_login_form(){
 					</div>
 				</div>
 </form>
-<?php
-echo_short('
 	<legend>
 	<a href="register.php">新人注册</a>
 	&nbsp;|&nbsp;
@@ -71,7 +69,7 @@ echo_short('
 	&nbsp;|&nbsp;
 	<a href="log.html">开发进度</a>
 	</legend>
-');
+<?php
 }
 function display_date_button($flag){
 	//flag取值  1:month 2:day 3:hour

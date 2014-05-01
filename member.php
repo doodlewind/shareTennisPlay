@@ -12,7 +12,10 @@ display_timeline();
 set_page_footer(1);
 
 set_page_header('rank_free',"积分排名");
-display_free_table();
+$conn = db_connect();
+$freeVaryTable = new freeVaryTable($conn);
+$freeAllTable = new freeAllTable($conn);
+$freeFrequencyTable = new freeFrequencyTable($conn);
 set_page_footer(2);
 
 set_page_header('rank_tour',"积分排名");

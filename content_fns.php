@@ -239,6 +239,145 @@ class practiceEvent extends event
 	}
 }
 
+class table
+{
+	public $str='';//table的html输出流
+	public $thead;//table的首部格式
+	public $tend;//table的尾部
+	public function __construct($conn){
+		$this->createTable($conn);//由子类实现
+		$this->displayTable();
+	}
+	public function displayTable(){
+		$table = $this->table;
+		$this->str.=$this->thead;
+		
+		$num = $this->num;
+		for($i=1;$i<=$num;$i++){
+			//showTableHead所需变量在继承的table类中初始化
+			$this->str.=$this->showRow($i,$table->fetch_assoc());
+		}
+		
+		$this->str.=$this->tend;
+		echo $this->str;
+	}
+	public function setLink($id,$name){
+		return '<a href="profile.php?id_ustc='.$id.'"data-ajax="false">'.$name.'</a>';
+	}
+}
+class freeVaryTable extends table
+{
+	public $thead = '<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
+    <h4>自由赛排名·3天积分</h4><table data-role="table" id="table-custom-2" data-mode="columntoggle" class="ui-body-d  table-stripe ui-responsive">';
+	public $tend = '</table></div>';
+	public function createTable($conn){
+		$this->sql = '
+			select id_p1 as id,name,sum(sum_single) as score from(
+				select time,sum(sum_half) as sum_single,name,id_p1 from(
+					select time,sum(value_p1) as sum_half,name_p1 as name,id_p1 from game_free
+					group by name_p1
+					union all
+					select time,sum(value_p2),name_p2,id_p2 from game_free
+					group by name_p2)
+				as sum_hf1
+				group by name
+				union
+				select time,sum(sum_tmp) as sum_double,name,id_p1 from(
+					select time,sum(value_p1n2) as sum_tmp,name_p1 as name,id_p1 from game_double
+					where time
+					group by name_p1 union all
+					select time,sum(value_p1n2),name_p2 as name,id_p2 from game_double
+					group by name_p2 union all
+					select time,sum(value_p3n4),name_p3 as name,id_p3 from game_double
+					group by name_p3 union all
+					select time,sum(value_p3n4),name_p4 as name,id_p4 from game_double
+					group by name_p4)
+				as sum_hf2
+				group by name)as sum_hf where UNIX_TIMESTAMP()-time < 259200
+			group by name
+			order by score desc;';
+		$this->table = $conn->query($this->sql);
+		$this->num = $this->table->num_rows;
+	}
+	public function showRow($i,$row){
+		return '<tr><td>'.$i.'</td><td>'.$this->setLink($row['id'],$row['name']).'</td><td>'.$row['score'].'</td></tr>';
+	}
+}
+class freeAllTable extends table
+{
+	public $thead = '<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
+    <h4>自由赛排名·总积分</h4><table data-role="table" id="table-custom-2" data-mode="columntoggle" class="ui-body-d  table-stripe ui-responsive">';
+	public $tend = '</table></div>';
+	public function createTable($conn){
+		$this->sql = '
+			select id_p1 as id,name,sum(sum_single) as score from(
+				select time,sum(sum_half) as sum_single,name,id_p1 from(
+					select time,sum(value_p1) as sum_half,name_p1 as name,id_p1 from game_free
+					group by name_p1
+					union all
+					select time,sum(value_p2),name_p2,id_p2 from game_free
+					group by name_p2)
+				as sum_hf1
+				group by name
+				union
+				select time,sum(sum_tmp) as sum_double,name,id_p1 from(
+					select time,sum(value_p1n2) as sum_tmp,name_p1 as name,id_p1 from game_double
+					where time
+					group by name_p1 union all
+					select time,sum(value_p1n2),name_p2 as name,id_p2 from game_double
+					group by name_p2 union all
+					select time,sum(value_p3n4),name_p3 as name,id_p3 from game_double
+					group by name_p3 union all
+					select time,sum(value_p3n4),name_p4 as name,id_p4 from game_double
+					group by name_p4)
+				as sum_hf2
+				group by name)as sum_hf
+			group by name
+			order by score desc;';
+		$this->table = $conn->query($this->sql);
+		$this->num = $this->table->num_rows;
+	}
+	public function showRow($i,$row){
+		return '<tr><td>'.$i.'</td><td>'.$this->setLink($row['id'],$row['name']).'</td><td>'.$row['score'].'</td></tr>';
+	}
+}
+class freeFrequencyTable extends table
+{
+	public $thead = '<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
+    <h4>自由赛排名·3天内所得局数</h4><table data-role="table" id="table-custom-2" data-mode="columntoggle" class="ui-body-d  table-stripe ui-responsive">';
+	public $tend = '</table></div>';
+	public function createTable($conn){
+		$this->sql = 'select id_p1 as id,name,sum(sum_single) as score,sum(count) as count from(
+	select time,sum(sum_half) as sum_single,name,id_p1,sum(count)as count from(
+		select time,sum(set_p1) as sum_half,name_p1 as name,id_p1,count(*)as count from game_free
+		group by name_p1
+		union
+		select time,sum(set_p2),name_p2,id_p2,count(*)as count from game_free
+		group by name_p2)
+	as sum_hf1 
+	group by name
+	union
+	select time,sum(sum_tmp) as sum_double,name,id_p1,sum(count)as count from(
+		select time,sum(set_p1n2) as sum_tmp,name_p1 as name,id_p1,count(*)as count from game_double
+		group by name_p1 union all
+		select time,sum(set_p1n2),name_p2 as name,id_p2,count(*)as count from game_double
+		group by name_p2 union all
+		select time,sum(set_p3n4),name_p3 as name,id_p3,count(*)as count from game_double
+		group by name_p3 union all
+		select time,sum(set_p3n4),name_p4 as name,id_p4,count(*)as count from game_double
+		group by name_p4)
+	as sum_hf2
+	group by name
+)as sum_hf where UNIX_TIMESTAMP()-time < 259200
+group by name
+order by score desc,count asc;';
+		$this->table = $conn->query($this->sql);
+		$this->num = $this->table->num_rows;
+	}
+	public function showRow($i,$row){
+		return '<tr><td>'.$i.'</td><td>'.$this->setLink($row['id'],$row['name']).'</td><td>'.$row['score'].'</td></tr>';
+	}
+}
 
 class profile_member{
 	public $id_ustc;
@@ -473,7 +612,7 @@ function setProfileLink($id,$name){
 		$href.= '</a>';
 		return $href;
 }
-*/
+
 function display_free_table(){
 	//flag=1，自由赛 flag=2，巡回赛
 	?>
@@ -524,7 +663,9 @@ function display_free_table(){
 		$results = $conn->query('select count(sum)+1 as rank from sum_free where sum > (select sum from sum_free where name="'.$name.'");');
 		$count = $results->fetch_assoc()['rank'];
 		echo_event("我的自由赛","".$my_total_score."分，排第".$count."名");
+		
 }
+*/
 function display_tour_table(){
 	//flag=1，自由赛 flag=2，巡回赛
 	//generate game info of current user
