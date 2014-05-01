@@ -268,7 +268,7 @@ class table
 class freeVaryTable extends table
 {
 	public $thead = '<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
-    <h4>自由赛排名·3天积分</h4><table data-role="table" id="table-custom-2" data-mode="columntoggle" class="ui-body-d  table-stripe ui-responsive">';
+    <h4>一周积分榜</h4><table data-role="table" id="table-custom-2" data-mode="columntoggle" class="ui-body-d  table-stripe ui-responsive">';
 	public $tend = '</table></div>';
 	public function createTable($conn){
 		$this->sql = '
@@ -293,7 +293,7 @@ class freeVaryTable extends table
 					select time,sum(value_p3n4),name_p4 as name,id_p4 from game_double
 					group by name_p4)
 				as sum_hf2
-				group by name)as sum_hf where UNIX_TIMESTAMP()-time < 259200
+				group by name)as sum_hf where UNIX_TIMESTAMP()-time < 604800
 			group by name
 			order by score desc;';
 		$this->table = $conn->query($this->sql);
@@ -306,7 +306,7 @@ class freeVaryTable extends table
 class freeAllTable extends table
 {
 	public $thead = '<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
-    <h4>自由赛排名·总积分</h4><table data-role="table" id="table-custom-2" data-mode="columntoggle" class="ui-body-d  table-stripe ui-responsive">';
+    <h4>All Time积分榜</h4><table data-role="table" id="table-custom-2" data-mode="columntoggle" class="ui-body-d  table-stripe ui-responsive">';
 	public $tend = '</table></div>';
 	public function createTable($conn){
 		$this->sql = '
@@ -344,7 +344,7 @@ class freeAllTable extends table
 class freeFrequencyTable extends table
 {
 	public $thead = '<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
-    <h4>自由赛排名·3天内所得局数</h4><table data-role="table" id="table-custom-2" data-mode="columntoggle" class="ui-body-d  table-stripe ui-responsive">';
+    <h4>一周勤奋榜</h4><table data-role="table" id="table-custom-2" data-mode="columntoggle" class="ui-body-d  table-stripe ui-responsive">';
 	public $tend = '</table></div>';
 	public function createTable($conn){
 		$this->sql = 'select id_p1 as id,name,sum(sum_single) as score,sum(count) as count from(
@@ -368,14 +368,14 @@ class freeFrequencyTable extends table
 		group by name_p4)
 	as sum_hf2
 	group by name
-)as sum_hf where UNIX_TIMESTAMP()-time < 259200
+)as sum_hf where UNIX_TIMESTAMP()-time < 604800
 group by name
 order by score desc,count asc;';
 		$this->table = $conn->query($this->sql);
 		$this->num = $this->table->num_rows;
 	}
 	public function showRow($i,$row){
-		return '<tr><td>'.$i.'</td><td>'.$this->setLink($row['id'],$row['name']).'</td><td>'.$row['score'].'</td></tr>';
+		return '<tr><td>'.$i.'</td><td>'.$this->setLink($row['id'],$row['name']).'</td><td>'.$row['count'].'场'.$row['score']."局".'</td></tr>';
 	}
 }
 
