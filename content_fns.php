@@ -7,9 +7,9 @@ class timeline
 		date_default_timezone_set('PRC');
 		$this->conn = db_connect();
 		$this->conn->query("SET NAMES UTF8");
-		$this->create_single_event($this->conn->query("select * from result_free;"));
-		$this->create_double_event($this->conn->query("select * from game_double;"));
-		$this->create_tour_event($this->conn->query("select * from result_tour;"));
+		$this->create_single_event($this->conn->query("select * from game_free order by time desc limit 30;"));
+		$this->create_double_event($this->conn->query("select * from game_double  order by time desc limit 30;"));
+		//$this->create_tour_event($this->conn->query("select * from result_tour;"));
 		$this->create_practice_event($this->conn->query("select * from practice;"));
 		$this->sort();
 	}
@@ -267,7 +267,8 @@ class table
 }
 class freeVaryTable extends table
 {
-	public $thead = '<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
+	public $thead = '
+<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
     <h4>一周积分榜</h4><table data-role="table" id="table-custom-2" data-mode="columntoggle" class="ui-body-d  table-stripe ui-responsive">';
 	public $tend = '</table></div>';
 	public function createTable($conn){
