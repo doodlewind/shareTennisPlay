@@ -54,11 +54,11 @@ function getRatio($conn,$id_p1,$id_p2){
 	}
 	
 	$p = (float)$score2/(float)$score1;
-	if($p < 0.9){
-		$p = 0.9;
+	if($p < 1){
+		$p = 1;
 	}
-	else if($p > 3){
-		$p = 3;
+	else if($p > 2.5){
+		$p = 2.5;
 	}
 	return $p;
 }

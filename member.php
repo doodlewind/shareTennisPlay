@@ -18,7 +18,7 @@ $freeAllTable = new freeAllTable($conn);
 $freeFrequencyTable = new freeFrequencyTable($conn);
 echo '<div data-role="collapsible" data-collapsed-icon="info" data-expanded-icon="info">
     <h4>计分说明</h4>
-  <p><b>单打胜者：</b> (27-总局数)*倍率<br/><b>单打负者：</b>总局数*倍率<br/><b>倍率</b>=对方一周积分/我方一周积分，下限为0.9，上限为3（我方若尚无积分，则按6分计算）<br/><b>双打胜者：</b>27-总局数<br/><b>双打负者：</b>总局数*倍率</p>
+  <p><b>单打胜者：</b> (27-总局数)*倍率<br/><b>单打负者：</b>总局数*倍率<br/><b>倍率</b>=对方一周积分/我方一周积分，下限为1，上限为2.5（我方若尚无积分，则按6分计算）<br/><b>双打胜者：</b>27-总局数<br/><b>双打负者：</b>总局数*倍率</p>
   </div>';
 set_page_footer(2);
 

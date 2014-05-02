@@ -371,7 +371,7 @@ class freeFrequencyTable extends table
 	group by name
 )as sum_hf where UNIX_TIMESTAMP()-time < 604800
 group by name
-order by score desc,count asc;';
+order by order by count desc,score desc;';
 		$this->table = $conn->query($this->sql);
 		$this->num = $this->table->num_rows;
 	}

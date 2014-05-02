@@ -191,8 +191,6 @@ function set_html_header(){
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="pic/icon-114.png">
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="pic/icon-144.png">
 <link rel="apple-touch-startup-image" href="pic/startup-320x460.jpg">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
 <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1.0, maximum-scale=1, user-scalable=no">
 <style>
@@ -209,6 +207,13 @@ function set_html_header(){
 }
 */
 </style>
+<script>
+window.onload = function(){
+    setTimeout(function(){
+        window.scrollTo(0, 1);
+    }, 100);
+}//hide top domain bar after loaded
+</script>
 <title>USTC-TENNIS</title>
 </head>
 <body>	
