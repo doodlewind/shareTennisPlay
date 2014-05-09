@@ -153,7 +153,7 @@ class singleEvent extends event
 		$this->id_p1 = $this->row['id_p1'];
 		$this->id_p2 = $this->row['id_p2'];
 		$this->name1_linked = $this->setProfileLink($this->id_p1,$this->name1);
-		$this->name2_linked = $this->setProfileLink($this->id_p2,$this->name1);
+		$this->name2_linked = $this->setProfileLink($this->id_p2,$this->name2);
 		$title = $this->name1_linked;
 		$title.= '&nbsp;';
 		$title.= $this->row['set_p1'];
