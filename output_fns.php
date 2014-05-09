@@ -159,10 +159,11 @@ function echo_event_timeline($title,$content,$comment_info){
 	 	   </div>
 	 	   <div data-mini="true" class="ui-body ui-body-a">
 	 	     <p><?php echo $content;?></p>
-			 <br/>
+			 
 	 	   </div>
 	 	 </div>
 	 	 </fieldset>
+		 <br/>
 <?php
 }
 /*
