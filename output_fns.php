@@ -148,23 +148,6 @@ function echo_event($title,$content){
 	 	 </fieldset>
 <?php
 }
-function echo_event_timeline($title,$content,$comment_info){
-	//timeline专用的格式化输出函数
-	//$comment_info为调用js的字符串  setComment(12,"game")
-?>
-	 <fieldset data-role="controlgroup" data-mini="true">
-	 	 <div class="ui-corner-all custom-corners">
-	 	   <div class="ui-bar ui-bar-a">
-	 	     <h3><?php echo $title;?></h3><div style="float:right;"><a href="#comment"data-rel="popup"data-position-to="window"data-transition="pop"onclick="<?php echo $comment_info;?>">评论</a></div>
-	 	   </div>
-	 	   <div data-mini="true" class="ui-body ui-body-a">
-	 	     <p><?php echo $content;?></p>
-			 <br/>
-	 	   </div>
-	 	 </div>
-	 	 </fieldset>
-<?php
-}
 /*
 function echo_new_event($title,$content){
 	
@@ -211,9 +194,6 @@ function set_html_header(){
 <meta name="format-detection" content="telephone=no">
 <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1.0, maximum-scale=1, user-scalable=no">
 <style>
-#event_id,#event_type{
-	display:none !important;
-}
 .ui-table-columntoggle-btn {
     display: none !important;
 }
@@ -227,16 +207,12 @@ function set_html_header(){
 }
 */
 </style>
-<script type="text/javascript">
-function setComment(event_id,event_type){
-	//alert(target_id);
-	//alert(target_type);
-	var event_id_input = document.getElementById("event_id");
-	var event_type_input = document.getElementById("event_type");
-	event_id_input.value = event_id;
-	event_type_input.value = event_type;
-	
-}
+<script>
+window.onload = function(){
+    setTimeout(function(){
+        window.scrollTo(0, 1);
+    }, 100);
+}//hide top domain bar after loaded
 </script>
 <title>USTC-TENNIS</title>
 </head>
@@ -439,15 +415,14 @@ function display_upload_form(){
 <body>
 	<iframe width='0' height='0' frameborder='0' src="cache.html"></iframe>
 	<div data-role="page" id="single">
-		
 		<div data-role="header">
 	 	   <div data-role="navbar"><!-- navbar -->
 	 	           <ul>
 	 	               <li><a href="#"class="ui-btn-active">上传单打</a></li>
 	 	               <li><a href="#double">上传双打</a></li>
 	 	           </ul>
-	 	   </div><!-- navbar -->
-			</div>
+	 	       </div><!-- navbar -->
+		  </div>
 
 		<div data-role="main">
 			<div style="padding:10px 20px;">

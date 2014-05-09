@@ -16,28 +16,28 @@ class timeline
 	private function create_single_event($results){
 		$num_results = $results->num_rows;
 		for($i=0;$i<$num_results;$i++){
-			$tmp = new singleEvent($this->conn,$results->fetch_assoc());
+			$tmp = new singleEvent($results->fetch_assoc());
 			$this->event_insert($tmp);
 		}
 	}
 	private function create_double_event($results){
 		$num_results = $results->num_rows;
 		for($i=0;$i<$num_results;$i++){
-			$tmp = new doubleEvent($this->conn,$results->fetch_assoc());
+			$tmp = new doubleEvent($results->fetch_assoc());
 			$this->event_insert($tmp);
 		}
 	}
 	private function create_tour_event($results){
 		$num_results = $results->num_rows;
 		for($i=0;$i<$num_results;$i++){
-			$tmp = new tourEvent($this->conn,$results->fetch_assoc());
+			$tmp = new tourEvent($results->fetch_assoc());
 			$this->event_insert($tmp);
 		}
 	}
 	private function create_practice_event($results){
 		$num_results = $results->num_rows;
 		for($i=0;$i<$num_results;$i++){
-			$tmp = new practiceEvent($this->conn,$results->fetch_assoc());
+			$tmp = new practiceEvent($results->fetch_assoc());
 			$this->event_insert($tmp);
 		}
 	}
@@ -58,7 +58,7 @@ class timeline
 			return;
 		}
 		foreach($this->event as $key => $value){
-			echo_event_timeline($value->getTitle(),$value->getContent(),$value->getCommentInfo());
+			echo_event($value->getTitle(),$value->getContent());
 		}
 	}
 }
@@ -69,8 +69,7 @@ class event
 	public $row;
 	public $title;
 	public $content;
-	public function __construct($conn,$row){
-		$this->conn=$conn;
+	public function __construct($row){
 		$this->row=$row;
 		$this->time=$this->row['time'];
 		//echo_event($this->getTitle(),$this->getContent());
@@ -128,39 +127,21 @@ class event
 		else
 			return false;
 	}
-	public function displayComment($type){
-		$sql = 'select * from comment where event_type = "'.$type.'" and event_id  ="'.$this->id.'";';
-		$comment = $this->conn->query($sql);
-		//echo_short($sql);
-		$content = "";
-		$num = $comment->num_rows;
-		for($i=0;$i<$num;$i++){
-			$row = $comment->fetch_assoc();
-			$content.='<div class="ui-bar ui-bar-a"><h3>'.
-				$this->setProfileLink($row['critics_id'],$row['critics_name']).
-				'：'.
-				$row['content'].'</h3></div>';
-		}
-		return $content;
-	}
 }
 class singleEvent extends event
 {
 	public function getTitle(){
-		$this->id = $this->row['id_game'];
 		$this->name1 = $this->row['name_p1'];
 		$this->name2 = $this->row['name_p2'];
 		$this->id_p1 = $this->row['id_p1'];
 		$this->id_p2 = $this->row['id_p2'];
-		$this->name1_linked = $this->setProfileLink($this->id_p1,$this->name1);
-		$this->name2_linked = $this->setProfileLink($this->id_p2,$this->name1);
-		$title = $this->name1_linked;
+		$title = $this->setProfileLink($this->id_p1,$this->name1);
 		$title.= '&nbsp;';
 		$title.= $this->row['set_p1'];
 		$title.= '-';
 		$title.= $this->row['set_p2'];
 		$title.= '&nbsp;';
-		$title.= $this->name2_linked;
+		$title.= $this->setProfileLink($this->id_p2,$this->name2);
 		return $title;
 	}
 	public function getContent(){
@@ -169,74 +150,42 @@ class singleEvent extends event
 			$content = $this->countTime().'，'.$this->getCourt();
 		}
 		else 
-			/*
-			<div class="ui-bar ui-bar-a">
-				<h3><a href="#">高洋</a>：哈哈哈哈哈</h3>
-			</div>
-			*/
-			
-			$content = $this->countTime().'，'.$this->getCourt().
-			'<div class="ui-bar ui-bar-a"><h3>'.
-			$this->name1_linked.'：'.$comment.'</h3></div>';
-			$content.= $this->displayComment('game_free');
+			$content = $this->countTime().'，'.$this->getCourt().'，『'.$comment.'』';
 		return $content;
-	}
-	public function getCommentInfo(){
-		$this->id = $this->row['id_game'];
-		return "setComment(".$this->id.",'game_free')";
 	}
 }
 class doubleEvent extends event
 {
-	public function getTitle(){
-		$this->id = $this->row['id_game_double'];
+	function getTitle(){
 		$this->name1 = $this->row['name_p1'];
 		$this->name2 = $this->row['name_p2'];
 		$this->name3 = $this->row['name_p3'];
 		$this->name4 = $this->row['name_p4'];
-		$this->id_p1 = $this->row['id_p1'];
-		$this->id_p2 = $this->row['id_p2'];
-		$this->id_p3 = $this->row['id_p3'];
-		$this->id_p4 = $this->row['id_p4'];
-		$this->name1_linked = $this->setProfileLink($this->id_p1,$this->name1);
-		$this->name2_linked = $this->setProfileLink($this->id_p2,$this->name2);
-		$this->name3_linked = $this->setProfileLink($this->id_p3,$this->name3);
-		$this->name4_linked = $this->setProfileLink($this->id_p4,$this->name4);
-		
-		$title = $this->name1_linked;
+		$id_p1 = $this->row['id_p1'];
+		$id_p2 = $this->row['id_p2'];
+		$id_p3 = $this->row['id_p3'];
+		$id_p4 = $this->row['id_p4'];
+		$title = $this->setProfileLink($id_p1,$this->name1);
 		$title.= '&nbsp;';
-		$title.= $this->name2_linked;
+		$title.= $this->setProfileLink($id_p2,$this->name2);
 		$title.= '&nbsp;';
 		$title.= $this->row['set_p1n2'];
 		$title.= '-';
 		$title.= $this->row['set_p3n4'];
 		$title.= '&nbsp;';
-		$title.= $this->name3_linked;
+		$title.= $this->setProfileLink($id_p3,$this->name3);
 		$title.= '&nbsp;';
-		$title.= $this->name4_linked;
+		$title.= $this->setProfileLink($id_p4,$this->name4);
 		return $title;
 	}
-	public function getContent(){
-		$comment = $this->row['comment'];
-		if($comment=="NULL"){
-			$content = $this->countTime().'，'.$this->getCourt();
-		}
-		else 
-			$content = $this->countTime().'，'.$this->getCourt().
-			'<div class="ui-bar ui-bar-a"><h3>'.
-			$this->name1_linked.'：'.$comment.'</h3></div>';
-			$content.=$this->displayComment('game_double');
+	function getContent(){
+		$content = $this->countTime().'，'.$this->getCourt().'，『'.$this->row['comment'].'』';
 		return $content;
-	}
-	public function getCommentInfo(){
-		$this->id = $this->row['id_game_double'];
-		return "setComment(".$this->id.",'game_double')";
 	}
 }
 class tourEvent extends event
 {
 	function getTitle(){
-		$this->id = $this->row['id_game'];
 		$this->name1 = $this->row['name_p1'];
 		$this->name2 = $this->row['name_p2'];
 		$this->id_p1 = $this->row['id_p1'];
@@ -252,31 +201,25 @@ class tourEvent extends event
 	}
 	function getContent(){
 		$content = $this->countTime().'，【巡回赛】'.$this->getCourt();
-		$content.=$this->displayComment('game_tour');
 		return $content;
-	}
-	public function getCommentInfo(){
-		$this->id = $this->row['id_game'];
-		return "setComment(".$this->id.",'game_tour')";
 	}
 }
 class practiceEvent extends event
 {
-	public function getTitle(){
+	function getTitle(){
 		$name = $this->getName('id_p1');
 		return $this->setProfileLink($this->id,$name)." 练了球";
 	}
-	public function getContent(){
-		$this->id = $this->row['id_practice'];
-		return $this->countTime()."，".$this->getItem().$this->getDuration().$this->displayComment('practice');
+	function getContent(){
+		return $this->countTime()."，".$this->getItem().$this->getDuration();
 	}
-	public function getDuration(){
+	function getDuration(){
 		if($this->row['duration']==0){
 			$str="坚持了半小时";
 		}else $str="坚持了".$this->row['duration']."小时";
 		return $str;
 	}
-	public function getItem(){
+	function getItem(){
 		$str = '练了';
 		$flag = $this->row['sum_item'];
 		//8421求和唯一性，判断正手、反手、发球、截击
@@ -294,11 +237,6 @@ class practiceEvent extends event
 		}
 		return $str;
 	}
-	public function getCommentInfo(){
-		$this->id = $this->row['id_practice'];
-		return "setComment(".$this->id.",'practice')";
-	}
-	
 }
 
 class table
@@ -433,7 +371,7 @@ class freeFrequencyTable extends table
 	group by name
 )as sum_hf where UNIX_TIMESTAMP()-time < 604800
 group by name
-order by order by count desc,score desc;';
+order by count desc,score desc;';
 		$this->table = $conn->query($this->sql);
 		$this->num = $this->table->num_rows;
 	}
@@ -665,21 +603,6 @@ function display_timeline_old(){
 */
 function display_timeline(){
 	$timeline = new timeline();
-	// hack for comment popup window
-	echo'
-	   	<!---评论begin-->
-	   	<div data-role="popup" id="comment" data-theme="a" class="ui-corner-all">
-	   		<form action="upload_verify.php"method="post">
-	   	        <div style="padding:10px 20px;">
-	   				<input type="text"data-mini="true"name="event_id"id="event_id" value="">
-	   				<input type="text"data-mini="true"name="event_comment"id="event_comment" value="">
-					<input type="text"data-mini="true"name="event_type"id="event_type" value="">
-	   				<input type="submit"data-mini="true"value="评论">
-	   	        </div>
-	   		</form>
-	   	</div>
-	   	<!--评论end-->
-		';
 }
 /*
 function setProfileLink($id,$name){

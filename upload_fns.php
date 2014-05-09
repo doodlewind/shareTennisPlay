@@ -133,7 +133,7 @@ function upload_free($flag,$conn){
 		
 		$sql = 'insert into game_double values(
 			NULL,"'.$time.'","'.$id_p1.'","'.$id_p2.'","'.$id_p3.'","'.$id_p4.'","'.$set_p1n2.'","'.$set_p3n4.'","'.$value_p1n2.'","'.$value_p3n4.'","'.$court.'","'.$comment.'","'.$name_p1.'","'.$name_p2.'","'.$name_p3.'","'.$name_p4.'");';
-
+		//throw new Exception ($sql);
 		$result = $conn->query($sql);
 	}else throw new Exception ('请勿重复刷新本页，<a href="upload.php#single"data-ajax="false">返回</a>');
 }
@@ -209,20 +209,6 @@ function upload_tour($conn){
 			NULL,"'.$time.'","'.$id_p1.'","'.$id_p2.'","'.$set_p1.'","'.$set_p2.'","'.$value_p1.'","'.$value_p2.'","'.$court.'",NULL);'.*/'上传失败，未连接到数据库');
 	}
 	return true;	
-}
-function upload_comment($conn){
-	$comment = $_POST['event_comment'];
-	$event_type = $_POST['event_type'];
-	$event_id = $_POST['event_id'];
-	$critics_id = $_SESSION['valid_id_ustc'];
-	if(!isset($critics_id)){
-		throw new Exception ('登录状态异常，<a href="login.php"data-ajax="false"返回</a>');
-	}
-	//获得评论者的姓名，一同上传
-	$critics_name = $conn->query('select name from user where id_ustc ="'.$critics_id.'";')->fetch_assoc()['name'];
-	$sql = 'insert into comment values(NULL,UNIX_TIMESTAMP(),"'.$event_type.'","'.$event_id.'","'.$critics_id.'","'.$critics_name.'",NULL,"'.$comment.'");';
-	//throw new Exception($sql);
-	$conn->query($sql);
 }
 
 
