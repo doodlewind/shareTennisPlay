@@ -8,7 +8,6 @@ set_html_header();
 
 set_page_header("member","主页");
 check_valid_id();
-echo_short('重新添加<a href="login.php">这里</a>到主屏可解决登录状态问题');
 display_timeline();
 set_page_footer(1);
 

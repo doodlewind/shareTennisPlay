@@ -9,13 +9,16 @@
 		if(!filled_out($_POST)) {
 			throw new Exception('没填完整呢，<a href="upload.php"data-ajax="false">返回</a>');
 		}
+		if(isset($_POST['event_comment'])){
+			upload_comment($conn);
+		}
 		if(isset($_POST['name_p2'])&&!isset($_POST['name_p3'])){
 			//throw new Exception ("uploadsingle");
-			upload_free(1,$conn);		
+			upload_free(1,$conn);
 		}
 		if(isset($_POST['name_p3'])){
 			//throw new Exception ("uploaddouble");
-			upload_free(2,$conn);	
+			upload_free(2,$conn);
 		}
 		if(isset($_POST['duration'])){
 			//throw new Exception ("practice");
@@ -23,7 +26,7 @@
 		}
 		if(isset($_POST['password'])){
 			//throw new Exception ("chgpasswd");
-			update_password($conn);	
+			update_password($conn);
 		}
 		//throw new Exception ("failed");
 		//布置成员页面
