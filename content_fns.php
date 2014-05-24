@@ -420,28 +420,35 @@ class freeFrequencyTable extends table
     <h4>一周勤奋榜</h4><table data-role="table" id="table-custom-2" data-mode="columntoggle" class="ui-body-d  table-stripe ui-responsive">';
 	public $tend = '</table></div>';
 	public function createTable($conn){
-		$this->sql = 'select id_p1 as id,name,sum(sum_single) as score,sum(count) as count from(
+		$this->sql = '
+	select id_p1 as id,name,sum(sum_single) as score,sum(count) as count from(
 	select time,sum(sum_half) as sum_single,name,id_p1,sum(count)as count from(
 		select time,sum(set_p1) as sum_half,name_p1 as name,id_p1,count(*)as count from game_free
+		where UNIX_TIMESTAMP()-time < 604800
 		group by name_p1
 		union
 		select time,sum(set_p2),name_p2,id_p2,count(*)as count from game_free
+		where UNIX_TIMESTAMP()-time < 604800
 		group by name_p2)
 	as sum_hf1 
 	group by name
 	union
 	select time,sum(sum_tmp) as sum_double,name,id_p1,sum(count)as count from(
 		select time,sum(set_p1n2) as sum_tmp,name_p1 as name,id_p1,count(*)as count from game_double
+		where UNIX_TIMESTAMP()-time < 604800
 		group by name_p1 union all
 		select time,sum(set_p1n2),name_p2 as name,id_p2,count(*)as count from game_double
+		where UNIX_TIMESTAMP()-time < 604800
 		group by name_p2 union all
 		select time,sum(set_p3n4),name_p3 as name,id_p3,count(*)as count from game_double
+		where UNIX_TIMESTAMP()-time < 604800
 		group by name_p3 union all
 		select time,sum(set_p3n4),name_p4 as name,id_p4,count(*)as count from game_double
+		where UNIX_TIMESTAMP()-time < 604800
 		group by name_p4)
 	as sum_hf2
 	group by name
-)as sum_hf where UNIX_TIMESTAMP()-time < 604800
+)as sum_hf 
 group by name
 order by count desc,score desc;';
 		$this->table = $conn->query($this->sql);
