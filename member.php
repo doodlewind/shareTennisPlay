@@ -3,14 +3,14 @@
 require_once('tennis_fns.php');
 session_start();
 init_member();//this function locates in user_auth_fun.php
+set_member_header();
 
-set_html_header();
+
 
 set_page_header("member","主页");
 check_valid_id();
 display_timeline();
 set_page_footer(1);
-
 set_page_header('rank_free',"积分排名");
 $conn = db_connect();
 $freeVaryTable = new freeVaryTable($conn);

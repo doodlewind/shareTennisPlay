@@ -148,6 +148,97 @@ function echo_event($title,$content){
 	 	 </fieldset>
 <?php
 }
+function display_timeline(){
+?>
+	<!---评论begin-->
+	<div data-role="popup" id="comment" data-theme="a" class="ui-corner-all">
+		<form action="upload_verify.php"method="post">
+	        <div style="padding:10px 20px;">
+				<input type="text"data-mini="true"name="event_id"id="event_id" value="">
+				<input type="text"data-mini="true"name="event_comment"id="event_comment" value="">
+				<input type="text"data-mini="true"name="event_type"id="event_type" value="">
+				<input type="submit"data-mini="true"value="评论">
+	        </div>
+		</form>
+	</div>
+	<!--评论end-->
+	<fieldset id="timeline" data-role="controlgroup"data-mini="true"></fieldset>
+	<button data-mini="true"onclick="showMoreEvent();">Show More</button>
+<?php
+}
+function set_member_header(){
+?>
+	<!DOCTYPE html>
+	<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="../jquery/jquery.mobile-1.4.0.css">
+	<script src="../jquery/jquery-2.0.3.min.js"></script>
+	<script src="../jquery/jquery.mobile-1.4.0.js"></script>
+	<script src="../jquery/zxml.js"></script>
+	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="pic/icon-57.png">
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="pic/icon-72.png">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="pic/icon-114.png">
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="pic/icon-144.png">
+	<link rel="apple-touch-startup-image" href="pic/startup-320x460.jpg">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1.0, maximum-scale=1, user-scalable=no">
+	<style>
+	#event_id,#event_type{
+		display:none !important;
+	}
+	.ui-table-columntoggle-btn {
+	    display: none !important;
+	}
+
+	</style>
+	<script type="text/javascript">
+	var countEvent = 0;
+	var countFreeTable = 0;
+	var oXmlHttp = zXmlHttp.createRequest();
+	var oXmlHttpFreeTable = zXmlHttp.createRequest();
+	oXmlHttp.onreadystatechange = function(){
+		if (oXmlHttp.readyState == 4) {
+			//alert(oXmlHttp.statusText);
+			//alert(oXmlHttp.responseText);
+			var timeline = document.getElementById("timeline");
+			timeline.innerHTML += oXmlHttp.responseText;
+		}
+	}
+	
+	oXmlHttpFreeTable.onreadystatechange = function(){
+		if (oXmlHttpFreeTable.readyState == 4) {
+			var freeTable = document.getElementById("freeTable");
+			freeTable.innerHTML += oXmlHttpFreeTable.responseText;
+		}
+	}
+	function setComment(event_id,event_type){
+		//alert(target_id);
+		//alert(target_type);
+		var event_id_input = document.getElementById("event_id");
+		var event_type_input = document.getElementById("event_type");
+		event_id_input.value = event_id;
+		event_type_input.value = event_type;	
+	}
+	function showMoreEvent(){
+		oXmlHttp.open("get","event.php?count="+countEvent,true);
+		oXmlHttp.send(null);
+		countEvent += 5;
+	}
+	function showMoreFreeTable(){
+		oXmlHttpFreeTable.open("get","free_table.php?count="+countFreeTable,true);
+		oXmlHttpFreeTable.send(null);
+		countFreeTable += 5;
+	}
+	showMoreEvent();
+	showMoreFreeTable();
+	</script>
+	<title>USTC-TENNIS</title>
+	</head>
+	<body>	
+		<iframe width='0' height='0' frameborder='0' src="cache.html"></iframe>
+<?php
+}
 function echo_event_timeline($title,$content,$comment_info){
 	//timeline专用的格式化输出函数
 	//$comment_info为调用js的字符串  setComment(12,"game")
@@ -182,9 +273,6 @@ function echo_button_id($flag,$flag2){
 	if($flag2=='a')
 		echo '<a href="#'.$flag.'_button"data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all  ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">练球</a>';
 	else echo '<div id="'.$flag.'_button"data-role="popup"data-theme="a"class="ui-corner-all">';
-	
-	
-
 }
 function echo_short($content){
 	?>

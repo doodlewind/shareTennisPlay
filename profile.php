@@ -1,4 +1,47 @@
+<?function set_profile_header(){
+?>
+	<!DOCTYPE html>
+	<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="../jquery/jquery.mobile-1.4.0.css">
+	<script src="../jquery/jquery-2.0.3.min.js"></script>
+	<script src="../jquery/jquery.mobile-1.4.0.js"></script>
+	<script src="../jquery/zxml.js"></script>
+	<meta name="format-detection" content="telephone=no">
+	<meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1.0, maximum-scale=1, user-scalable=no">
+	<style>
+	#event_id,#event_type{
+		display:none !important;
+	}
+	.ui-table-columntoggle-btn {
+	    display: none !important;
+	}
+	</style>
+	<script type="text/javascript">
+	var countFreeTable = 0;
+	var oXmlHttpFreeTable = zXmlHttp.createRequest();
+	oXmlHttpFreeTable.onreadystatechange = function(){
+		if (oXmlHttpFreeTable.readyState == 4) {
+			var freeTable = document.getElementById("freeProfileTable");
+			freeTable.innerHTML += oXmlHttpFreeTable.responseText;
+		}
+	}
+	function showMoreFreeTable(){
+		var linkToGet = "free_table.php?count="+countFreeTable+"&id="+<?php echo '"'.$_GET['id_ustc'].'"';?>;
+		oXmlHttpFreeTable.open("get",linkToGet,true);
+		
+		oXmlHttpFreeTable.send(null);
+		countFreeTable += 5;
+	}
+	showMoreFreeTable();
+	</script>
+	<title>USTC-TENNIS</title>
+	</head>
+	<body>	
+		<iframe width='0' height='0' frameborder='0' src="cache.html"></iframe>
 <?php
+}
 
 require_once('tennis_fns.php');
 session_start();
@@ -48,49 +91,28 @@ class profile{
 			
 			$event_old = $this->conn->query('select * from record_tour where name = "'.$this->name.'";');
 			$num = $event_old->num_rows;
-			$str='<table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
-			for($i=0;$i<$num;$i++){
-				$result = $event_old->fetch_assoc();
-				$str.= '<tr><td>';
-				$str.= date('m月',$result['time'])."</td><td>";
-				$str.= $result['stat']."</td><td><b>";
-				$str.= $result['value']."分";
-				$str.= '</b></td></tr>';
-			}	
-			$str.= '</table><br/><table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
-			$num = $event->num_rows;
-			for($i=0;$i<$num;$i++){
-				$str.=$this->display_row($event);
-			}
-			$str.="</table>";
-			echo_event("巡回赛战绩",$str);
+		$str='<table data-role="table"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
+		for($i=0;$i<$num;$i++){
+			$result = $event_old->fetch_assoc();
+			$str.= '<tr><td>';
+			$str.= date('m月',$result['time'])."</td><td>";
+			$str.= $result['stat']."</td><td><b>";
+			$str.= $result['value']."分";
+			$str.= '</b></td></tr>';
+		}	
+		$str.= '</table><br/><table data-role="table"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
+		$num = $event->num_rows;
+		for($i=0;$i<$num;$i++){
+			$str.=$this->display_row($event);
 		}
-		public function display_game_free(){
-			//显示单打部分
-			$event = $this->conn->query('select * from result_free where name_p1="'.$this->name.'" or name_p2="'.$this->name.'"
-	order by time desc;');
-			$str = '';
-			$str.= '<table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
-			$num1 = $event->num_rows;
-			for($i=0;$i<$num1;$i++){
-				$str.=$this->get_single_row($event);
-			}
-			$str.='</table><table data-role="table"id="table-custom-2"data-mode="columntoggle" class="ui-body-d table-stripe ui-responsive"data-column-popup-theme="a">';
+		$str.="</table>";
+		echo_event("巡回赛战绩",$str);
+}
+	public function display_game_free(){
+		$str= '<div id="freeProfileTable"class="ui-body"></div><br/>
+			<button onclick="showMoreFreeTable()"data-mini="true">Show More</button>';
 		
-			//显示双打部分
-			$sql = 'select * from game_double where name_p1="'.$this->name.'" or name_p2="'.$this->name.'" or name_p3="'.$this->name.'"or name_p4="'.$this->name.'"order by time desc;';
-			//echo_short($sql);
-			$event = $this->conn->query($sql);
-			$num2 = $event->num_rows;
-			if($num1==0&&$num2==0){
-				echo_event("自由赛战绩",'暂无');
-				return;
-			}
-			for($i=0;$i<$num2;$i++){
-				$str.=$this->get_double_row($event);
-			}
-			$str.="</table>";
-			echo_event("自由赛战绩",$str);
+		echo_event("自由赛战绩",$str);
 		}
 	public function display_practice_time(){
 		$durations = $this->conn->query('select duration from practice where id_p1="'.$this->id_ustc.'";');
@@ -163,7 +185,7 @@ class profile{
 	}
 }
 
-set_html_header();
+set_profile_header();
 
 $profile = new profile();
 set_page_header('banner',"会员: ".$profile->name);

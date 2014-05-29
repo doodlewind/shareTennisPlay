@@ -3,14 +3,14 @@ class timeline
 {
 	private $conn;
 	private $event;
-	function __construct(){
+	function __construct($count){
 		date_default_timezone_set('PRC');
 		$this->conn = db_connect();
 		$this->conn->query("SET NAMES UTF8");
-		$this->create_single_event($this->conn->query("select * from game_free order by time desc limit 30;"));
-		$this->create_double_event($this->conn->query("select * from game_double  order by time desc limit 30;"));
+		$this->create_single_event($this->conn->query("select * from game_free order by time desc limit ".$count.",5;"));
+		$this->create_double_event($this->conn->query("select * from game_double  order by time desc limit ".$count.",5;"));
 		//$this->create_tour_event($this->conn->query("select * from result_tour;"));
-		$this->create_practice_event($this->conn->query("select * from practice;"));
+		//$this->create_practice_event($this->conn->query("select * from practice;"));
 		$this->sort();
 	}
 	private function create_single_event($results){
@@ -174,7 +174,6 @@ class singleEvent extends event
 				<h3><a href="#">高洋</a>：哈哈哈哈哈</h3>
 			</div>
 			*/
-			
 			$content = $this->countTime().'，'.$this->getCourt().
 			'<div class="ui-bar ui-bar-a"><h3>'.
 			$this->name1_linked.'：'.$comment.'</h3></div>';
@@ -537,6 +536,11 @@ class profile_member{
 		}
 	public function display_game_free(){
 		//显示单打部分
+		$str= '<div id="freeTable"><p>点击删除将立即执行，当心手滑...</p></div><br/>
+			<button onclick="showMoreFreeTable()"data-mini="true">Show More</button>';
+		
+		echo_event("自由赛战绩",$str);
+		/*
 		$event = $this->conn->query('select * from game_free where name_p1="'.$this->name.'" or name_p2="'.$this->name.'"
 order by time desc;');
 		$str = '点击删除将立即执行，当心手滑...';
@@ -561,6 +565,7 @@ order by time desc;');
 		}
 		$str.="</table>";
 		echo_event("自由赛战绩",$str);
+		*/
 	}
 	public function display_id(){
 		echo_event("id",$this->$id_ustc);
@@ -583,6 +588,7 @@ order by time desc;');
 		$str =  "<tr><td>".$time."</td><td>".$name_p1."</td><td><b>".$set_p1."-".$set_p2."</b></td><td>".$name_p2."</td><td><b>".$value."分</b></td>";
 		$str.= '<td><a href="modify_verify.php?tp=fr_del&amp;id_game='.$id_game.'"data-ajax="false">删除</a></td></tr>';
 		return $str;
+		
 	}
 	public function get_double_row($event){
 		$row = $event->fetch_assoc();
@@ -680,24 +686,6 @@ function display_timeline_old(){
 	}
 }
 */
-function display_timeline(){
-	$timeline = new timeline();
-	// hack for comment popup window
-	echo'
-	   	<!---评论begin-->
-	   	<div data-role="popup" id="comment" data-theme="a" class="ui-corner-all">
-	   		<form action="upload_verify.php"method="post">
-	   	        <div style="padding:10px 20px;">
-	   				<input type="text"data-mini="true"name="event_id"id="event_id" value="">
-	   				<input type="text"data-mini="true"name="event_comment"id="event_comment" value="">
-					<input type="text"data-mini="true"name="event_type"id="event_type" value="">
-	   				<input type="submit"data-mini="true"value="评论">
-	   	        </div>
-	   		</form>
-	   	</div>
-	   	<!--评论end-->
-		';
-}
 /*
 function setProfileLink($id,$name){
 		$href = '<a href="profile.php?id_ustc=';
