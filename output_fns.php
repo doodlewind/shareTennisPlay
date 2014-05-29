@@ -196,6 +196,7 @@ function set_member_header(){
 	var countEvent = 0;
 	var countFreeTable = 0;
 	var oXmlHttp = zXmlHttp.createRequest();
+	var oXmlHttpH2H = zXmlHttp.createRequest();
 	var oXmlHttpFreeTable = zXmlHttp.createRequest();
 	oXmlHttp.onreadystatechange = function(){
 		if (oXmlHttp.readyState == 4) {
@@ -205,13 +206,19 @@ function set_member_header(){
 			timeline.innerHTML += oXmlHttp.responseText;
 		}
 	}
-	
+	oXmlHttpH2H.onreadystatechange = function(){
+		if (oXmlHttpH2H.readyState == 4) {
+			var h2h = document.getElementById("h2h");
+			h2h.innerHTML = oXmlHttpH2H.responseText;
+		}
+	}
 	oXmlHttpFreeTable.onreadystatechange = function(){
 		if (oXmlHttpFreeTable.readyState == 4) {
 			var freeTable = document.getElementById("freeTable");
 			freeTable.innerHTML += oXmlHttpFreeTable.responseText;
 		}
 	}
+	
 	function setComment(event_id,event_type){
 		//alert(target_id);
 		//alert(target_type);
@@ -229,6 +236,16 @@ function set_member_header(){
 		oXmlHttpFreeTable.open("get","free_table.php?count="+countFreeTable,true);
 		oXmlHttpFreeTable.send(null);
 		countFreeTable += 5;
+	}
+	function showH2H(){
+		var p1 = document.getElementById('h2h_p1');
+		var p2 = document.getElementById('h2h_p2');	
+		if(p1.value==""||p2.value==""){
+			alert("Missing Name");
+			return;
+		}	
+		oXmlHttpH2H.open("get","h2h.php?p1="+p1.value+"&p2="+p2.value,true);
+		oXmlHttpH2H.send(null);
 	}
 	showMoreEvent();
 	showMoreFreeTable();
@@ -268,6 +285,28 @@ function echo_new_event($title,$content){
 <?php
 }
 */
+function display_h2h(){
+?>
+	 <fieldset data-role="controlgroup" data-mini="true">
+	 	 <div class="ui-corner-all custom-corners">
+	 	   <div class="ui-bar ui-bar-a">
+	 	     <h3>H2H</h3>
+	 	   </div>
+	 	   <div data-mini="true" class="ui-body ui-body-a">
+			 <fieldset class="ui-grid-b">
+			     <div class="ui-block-a"data-mini="true"><input name="h2h_p1"id="h2h_p1"type="text"value="高洋"></div>
+			 	<div class="ui-block-b"data-mini="true"><p><center>VS</center></p></div>
+			     <div class="ui-block-c"data-mini="true"><input name="h2h_p2"id="h2h_p2"type="text"value="严忠波"></div>
+			 </fieldset>
+
+			 <input type="button"data-mini="true"onclick="showH2H();"value="Go!">
+			 <div id="h2h"></div>
+	 	   </div>
+		   
+	 	 </div>
+	`</fieldset>
+<?php
+}
 function echo_button_id($flag,$flag2){
 	//flag与set_html_header相同，flag2有a和div两种
 	if($flag2=='a')

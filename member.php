@@ -6,13 +6,13 @@ init_member();//this function locates in user_auth_fun.php
 set_member_header();
 
 
-
 set_page_header("member","主页");
 check_valid_id();
 display_timeline();
 set_page_footer(1);
 set_page_header('rank_free',"积分排名");
 $conn = db_connect();
+
 $freeVaryTable = new freeVaryTable($conn);
 $freeAllTable = new freeAllTable($conn);
 $freeFrequencyTable = new freeFrequencyTable($conn);
@@ -20,6 +20,7 @@ echo '<div data-role="collapsible" data-collapsed-icon="info" data-expanded-icon
     <h4>计分说明</h4>
   <p><b>单打胜者：</b> (27-总局数)*倍率<br/><b>单打负者：</b>总局数*倍率<br/><b>倍率</b>=对方一周积分/我方一周积分，下限为1，上限为2.5（我方若尚无积分，则按6分计算）<br/><b>双打胜者：</b>27-总局数<br/><b>双打负者：</b>总局数*倍率</p>
   </div>';
+display_h2h();
 set_page_footer(2);
 
 set_page_header('rank_tour',"积分排名");
