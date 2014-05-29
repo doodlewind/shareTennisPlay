@@ -294,9 +294,9 @@ function display_h2h(){
 	 	   </div>
 	 	   <div data-mini="true" class="ui-body ui-body-a">
 			 <fieldset class="ui-grid-b">
-			     <div class="ui-block-a"data-mini="true"><input name="h2h_p1"id="h2h_p1"type="text"value="高洋"></div>
+			     <div class="ui-block-a"data-mini="true"><input name="h2h_p1"id="h2h_p1"type="text"placeholder="Player1"></div>
 			 	<div class="ui-block-b"data-mini="true"><p><center>VS</center></p></div>
-			     <div class="ui-block-c"data-mini="true"><input name="h2h_p2"id="h2h_p2"type="text"value="严忠波"></div>
+			     <div class="ui-block-c"data-mini="true"><input name="h2h_p2"id="h2h_p2"type="text"placeholder="Player2"></div>
 			 </fieldset>
 
 			 <input type="button"data-mini="true"onclick="showH2H();"value="Go!">
